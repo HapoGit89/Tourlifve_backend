@@ -3,6 +3,10 @@ const app = express()
 const userRoutes = require("./routes/users.js")
 const { NotFoundError } = require("./expressError");
 
+
+// parse request bodies as json
+app.use(express.json())
+
 app.use("/users", userRoutes)
 
 /** Handle 404 errors -- this matches everything */
