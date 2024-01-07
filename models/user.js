@@ -2,7 +2,7 @@
 
 const db = require("../db.js");
 const bcrypt = require("bcrypt");
-const { sqlForPartialUpdate } = require("../helpers/sql");
+// const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
   NotFoundError,
   BadRequestError,
@@ -24,12 +24,10 @@ class User {
   static async authenticate(username, password) {
     // try to find the user first
     const result = await db.query(
-          `SELECT username,
-                  password,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
+          `SELECT id,
+                  username,
                   email,
-                  is_admin AS "isAdmin"
+                  image_url
            FROM users
            WHERE username = $1`,
         [username],
@@ -38,8 +36,16 @@ class User {
     const user = result.rows[0];
 
     if (user) {
+      // get password from seperate table
+      const result2 = await db.query(
+        `SELECT password
+         FROM login
+         WHERE user_id = $1`,
+      [user.id],
+  );
       // compare hashed password to a new hash from password
-      const isValid = await bcrypt.compare(password, user.password);
+      const isValid = await bcrypt.compare(password, result2.rows[0].password);
+      
       if (isValid === true) {
         delete user.password;
         return user;
@@ -57,7 +63,7 @@ class User {
    **/
 
   static async register(
-      { username, password, firstName, lastName, email, isAdmin }) {
+      { username, password, email, image_url }) {
     const duplicateCheck = await db.query(
           `SELECT username
            FROM users
@@ -74,24 +80,31 @@ class User {
     const result = await db.query(
           `INSERT INTO users
            (username,
-            password,
-            first_name,
-            last_name,
             email,
-            is_admin)
-           VALUES ($1, $2, $3, $4, $5, $6)
-           RETURNING username, first_name AS "firstName", last_name AS "lastName", email, is_admin AS "isAdmin"`,
+            image_url
+            )
+           VALUES ($1, $2, $3)
+           RETURNING id, username, email`,
         [
           username,
-          hashedPassword,
-          firstName,
-          lastName,
           email,
-          isAdmin,
+          image_url,
         ],
     );
 
     const user = result.rows[0];
+
+    const result2 = await db.query(
+      `INSERT INTO login
+       (user_id,
+        password
+        )
+       VALUES ($1, $2)`,
+    [
+      user.id,
+      hashedPassword
+    ],
+);
 
     return user;
   }
