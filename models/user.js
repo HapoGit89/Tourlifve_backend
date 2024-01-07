@@ -9,6 +9,8 @@ const {
   UnauthorizedError,
 } = require("../expressError");
 
+
+
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
 /** Related functions for users. */
@@ -117,13 +119,12 @@ class User {
   static async findAll() {
     const result = await db.query(
           `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
                   email,
-                  is_admin AS "isAdmin"
+                  image_url
            FROM users
            ORDER BY username`,
     );
+  
 
     return result.rows;
   }
@@ -144,10 +145,8 @@ class User {
   static async get(username) {
     const userRes = await db.query(
           `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
                   email,
-                  is_admin AS "isAdmin"
+                  image_url
            FROM users
            WHERE username = $1`,
         [username],
@@ -157,11 +156,6 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
     
-    user.jobs = []
-
-    const jobRes = await db.query(`SELECT job_id FROM applications WHERE username = $1`, [username])
-
-    jobRes.rows.forEach(e => user.jobs.push(e.job_id))
 
     return user;
   }

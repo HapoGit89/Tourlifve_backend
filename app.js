@@ -2,12 +2,13 @@ const express = require("express")
 const app = express()
 const userRoutes = require("./routes/users.js")
 const authRoutes = require("./routes/auth.js")
+const { authenticateJWT } = require("./middleware/auth");
 const { NotFoundError } = require("./expressError");
 
 
 // parse request bodies as json
 app.use(express.json())
-
+app.use(authenticateJWT);
 app.use("/users", userRoutes)
 app.use("/auth", authRoutes)
 
