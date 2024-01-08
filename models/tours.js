@@ -57,6 +57,39 @@ class Tour {
       return tour;
     }
 
+  // Find all tours 
+    static async findAll() {
+        const result = await db.query(
+              `SELECT id,
+                      title,
+                      artist,
+                      startdate,
+                      enddate,
+                      user_id
+               FROM tours
+               ORDER BY user_id`,
+        );
+      
+    
+        return result.rows;
+      }
+
+    static async get(tour_id) {
+        const result = await db.query(
+              `SELECT title,
+                      artist,
+                      startdate,
+                      enddate,
+                      user_id
+               FROM tours
+               WHERE id = $1
+               ORDER BY user_id`,
+               [tour_id]
+        );
+      
+    
+        return result.rows;
+      }
   
     /** Delete given user from database; returns undefined. */
   

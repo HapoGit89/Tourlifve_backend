@@ -17,7 +17,6 @@ const { ensureLoggedIn} = require("../middleware/auth");
 router.get("/", ensureLoggedIn, async(req,res, next)=>{
 try{
     const response = await User.findAll()
-    console.log(response)
     return res.json(response)}
 catch(e){
     return next(e)

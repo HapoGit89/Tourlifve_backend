@@ -156,7 +156,7 @@ class User {
 
     user.tours = []
 
-    const tourRes = await db.query( `SELECT title, artist FROM tours WHERE user_id = $1`,
+    const tourRes = await db.query( `SELECT id, title, artist FROM tours WHERE user_id = $1`,
   [user.id],
   )
 
