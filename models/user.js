@@ -1,21 +1,20 @@
 "use strict";
 
 const db = require("../db.js");
+const {sqlForPartialUpdate} = require("../helpers/sql.js")
 const bcrypt = require("bcrypt");
-// const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
   NotFoundError,
   BadRequestError,
   UnauthorizedError,
 } = require("../expressError");
-
-
-
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
 /** Related functions for users. */
 
 class User {
+
+
   /** authenticate user with username, password.
    *
    * Returns { username, first_name, last_name, email, is_admin }
@@ -72,13 +71,14 @@ class User {
            WHERE username = $1`,
         [username],
     );
-
+    // check if username is already in db
     if (duplicateCheck.rows[0]) {
       throw new BadRequestError(`Duplicate username: ${username}`);
     }
-
+    // hash password using bcrypt
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
+    // Insert userdata into db
     const result = await db.query(
           `INSERT INTO users
            (username,
@@ -96,6 +96,7 @@ class User {
 
     const user = result.rows[0];
 
+    // insert password into seperate table
     const result2 = await db.query(
       `INSERT INTO login
        (user_id,
@@ -106,7 +107,8 @@ class User {
       user.id,
       hashedPassword
     ],
-);
+    );
+  password = ""
 
     return user;
   }
@@ -128,23 +130,19 @@ class User {
 
     return result.rows;
   }
- // given a username and JobId inserts into the applications table
-  static async applyforJob(jobId, username){
-    const result = await db.query(`INSERT INTO applications (username, job_id) VALUES ($1, $2) RETURNING username, job_id`, [username, jobId])
-    return result.rows[0]
-  }
 
   /** Given a username, return data about user.
    *
-   * Returns { username, first_name, last_name, is_admin, jobs }
-   *   where jobs is [JobId, JobId, ...]
+   * Returns { username, email, image_url}
+   *
    *
    * Throws NotFoundError if user not found.
    **/
 
   static async get(username) {
     const userRes = await db.query(
-          `SELECT username,
+          `SELECT id,
+                  username,
                   email,
                   image_url
            FROM users
@@ -155,7 +153,6 @@ class User {
     const user = userRes.rows[0];
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
-    
 
     return user;
   }
@@ -166,28 +163,23 @@ class User {
    * all the fields; this only changes provided ones.
    *
    * Data can include:
-   *   { firstName, lastName, password, email, isAdmin }
+   *   { email, image_url}
    *
-   * Returns { username, firstName, lastName, email, isAdmin }
+   * Returns { username, email, image_url }
    *
    * Throws NotFoundError if not found.
-   *
-   * WARNING: this function can set a new password or make a user an admin.
-   * Callers of this function must be certain they have validated inputs to this
-   * or a serious security risks are opened.
    */
 
   static async update(username, data) {
     if (data.password) {
-      data.password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
+      hashed_password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
     }
 
     const { setCols, values } = sqlForPartialUpdate(
-        data,
+       data,
         {
-          firstName: "first_name",
-          lastName: "last_name",
-          isAdmin: "is_admin",
+          email: "email",
+          image_url: "image_url"
         });
     const usernameVarIdx = "$" + (values.length + 1);
 
@@ -195,17 +187,41 @@ class User {
                       SET ${setCols} 
                       WHERE username = ${usernameVarIdx} 
                       RETURNING username,
-                                first_name AS "firstName",
-                                last_name AS "lastName",
-                                email,
-                                is_admin AS "isAdmin"`;
+                                image_url,
+                                email`;
     const result = await db.query(querySql, [...values, username]);
     const user = result.rows[0];
-
     if (!user) throw new NotFoundError(`No user: ${username}`);
-
-    delete user.password;
+    
     return user;
+  }
+
+    /** Update login table with new password
+     * 
+     * {username, password_old, password_new} => {token}
+   */
+
+  static async updatePassword(username, password_old, password_new) {
+    // get userdata from user table
+    const res1 = await db.query('SELECT * FROM users WHERE username = $1', [username])
+    const user = res1.rows[0]
+   // get password from login table using id from userdata
+    const res2 = await db.query('SELECT password FROM login WHERE user_id = $1', [user.id])
+
+    // check password_old input with hashed password in db
+    const isValid = await bcrypt.compare(password_old, res2.rows[0].password);
+
+    if (!isValid){
+      throw new UnauthorizedError
+    }
+    // update password in login table
+    const hashes_new_password = await bcrypt.hash(password_new, BCRYPT_WORK_FACTOR);
+    await db.query('UPDATE login SET password = $1 WHERE user_id = $2', [hashes_new_password, user.id])
+    delete res2.rows
+    password_old= ""
+    password_new = ""
+    return user
+
   }
 
   /** Delete given user from database; returns undefined. */
