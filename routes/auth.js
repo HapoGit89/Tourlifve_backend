@@ -7,6 +7,8 @@ const User = require("../models/user")
 const { BadRequestError} = require("../expressError")
 const userAuthSchema = require("../schemas/userAuthSchema.json")
 const userRegisterSchema = require("../schemas/userRegisterSchema.json")
+const userAuthUpdateSchema = require("../schemas/userAuthUpdateSchema.json")
+const userUpdateSchema = require ("../schemas/userAuthUpdateSchema.json")
 const {createToken} = require("../helpers/tokens")
 
 
@@ -51,6 +53,27 @@ router.post("/register", async function (req, res, next) {
     const newUser = await User.register({ ...req.body });
     const token = createToken(newUser);
     return res.status(201).json({ token });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// Updates user password 
+
+// {username, password, new_password} => {token}
+
+router.patch("/token", async function (req, res, next) {
+  try {
+    const validator = jsonschema.validate(req.body, userAuthUpdateSchema);
+    if (!validator.valid) {
+      const errs = validator.errors.map(e => e.stack);
+      throw new BadRequestError(errs);
+    }
+
+    const { username, password, new_password } = req.body;
+    const user = await User.updatePassword(username, password, new_password);
+    const token = createToken(user);
+    return res.json({ token });
   } catch (err) {
     return next(err);
   }

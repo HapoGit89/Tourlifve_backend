@@ -1,8 +1,9 @@
 const express = require('express')
 const User = require("../models/user.js")
-const {UnauthorizedError} = require("../expressError.js")
+const {UnauthorizedError, BadRequestError} = require("../expressError.js")
 const router = new express.Router();
 const db = require("../db")
+const jsonschema = require("jsonschema")
 const userUpdateSchema = require("../schemas/userUpdateSchema.json")
 const { ensureLoggedIn, authenticateJWT, ensureAdmin } = require("../middleware/auth");
 
@@ -33,7 +34,7 @@ router.get("/:username", ensureLoggedIn, async function (req, res, next) {
 
   router.patch("/:username", ensureLoggedIn, async function (req, res, next) {
     try {
-      if (req.params.username != res.locals.user.username && !res.locals.user.isAdmin){
+      if (req.params.username != res.locals.user.username){
         throw new UnauthorizedError
       }
       const validator = jsonschema.validate(req.body, userUpdateSchema);
