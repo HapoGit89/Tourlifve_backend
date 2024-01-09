@@ -5,6 +5,7 @@ const {UnauthorizedError, BadRequestError} = require("../expressError.js")
 const router = new express.Router();
 const jsonschema = require("jsonschema")
 const tourCreateSchema = require("../schemas/tourCreateSchema.json")
+const tourUpdateSchema = require("../schemas/tourUpdateSchema.json")
 const { ensureLoggedIn} = require("../middleware/auth");
 
 /** POST / => {title, crew, start, end, user_id, artist} => { tour: {id, title, crew, start, end, user_id, artist} }
@@ -69,25 +70,26 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     } })
 
 
-    // router.patch("/", ensureLoggedIn, async(req,res, next)=>{
-    //     try{
-    //         const validator = jsonschema.validate(req.body, tourCreateSchema);
-    //         if (!validator.valid) {
-    //           const errs = validator.errors.map(e => e.stack);
-    //           throw new BadRequestError(errs);
-    //         }
-    //         const {title, crew, start, end, user_id, artist} = req.body
+    router.patch("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
+        try{
+            const validator = jsonschema.validate(req.body, tourCreateSchema);
+            if (!validator.valid) {
+              const errs = validator.errors.map(e => e.stack);
+              throw new BadRequestError(errs);
+            }
+            const {user_id} = req.body
+            const tour_id = req.params.tour_id
     
         
-    //         const user = await User.get(res.locals.user.username)
-    //         if(user_id != user.id){
-    //             throw new UnauthorizedError
-    //         }
-    //         const tour = await Tour.createTour(req.body)
-    //         return res.json({tour:tour})
-    //     }
-    //     catch(e){
-    //         return next(e)
-    //     }
-        })
+            const user = await User.get(res.locals.user.username)
+            if(user_id != user.id){
+                throw new UnauthorizedError
+            }
+            const tour = await Tour.update(tour_id,req.body)
+            return res.json({tour:tour})
+        }
+        catch(e){
+            return next(e)
+        }
+    })
  module.exports = router;

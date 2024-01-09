@@ -1,10 +1,10 @@
 const db = require("../db.js");
 const {sqlForPartialUpdate} = require("../helpers/sql.js")
 const bcrypt = require("bcrypt");
+const unix = require("unix-timestamp")
 const {
   NotFoundError,
   BadRequestError,
-  UnauthorizedError,
 } = require("../expressError");
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
@@ -34,21 +34,23 @@ class Tour {
         throw new BadRequestError(`Duplicate tour: ${title} for user : ${user_id}`);
       }
  
-  
+      // convert start and enddates to unix timestamp
+
+      const endunix = unix.fromDate(end)
+      const startunix = unix.fromDate(start)
       // Insert tourdata into db
       const result = await db.query(
             `INSERT INTO tours
              (title,
-              crew,
               startdate,
               enddate,
               user_id,
               artist
               )
-             VALUES ($1, $2, $3, $4, $5, $6)
-             RETURNING title, crew, startdate, enddate, user_id, artist`,
+             VALUES ($1, $2, $3, $4, $5)
+             RETURNING title, startdate, enddate, user_id, artist`,
           [
-            title, crew, start, end, user_id, artist
+            title, startunix, endunix, user_id, artist
           ],
       );
   
@@ -70,7 +72,8 @@ class Tour {
                ORDER BY user_id`,
         );
       
-    
+          result.rows.forEach((el)=>el.startdate=unix.toDate(Number(el.startdate)))
+          result.rows.forEach((el)=>el.enddate=unix.toDate(Number(el.enddate)))
         return result.rows;
       }
 
@@ -90,21 +93,55 @@ class Tour {
     
         return result.rows;
       }
+
+
+      static async update(tour_id, data) {
+
+        data.end = unix.fromDate(data.end)
+        data.start= unix.fromDate(data.start)
+    
+        const { setCols, values } = sqlForPartialUpdate(
+           data,
+            {
+              title: "title",
+              artist: "artist",
+              start: "startdate",
+              end: "enddate",
+            });
+        const touridVarIdx = "$" + (values.length + 1);
+    
+        const querySql = `UPDATE tours
+                          SET ${setCols} 
+                          WHERE id = ${touridVarIdx} 
+                          RETURNING title,
+                                    artist,
+                                    startdate,
+                                    enddate,
+                                    user_id`;
+        const result = await db.query(querySql, [...values, tour_id]);
+        const tour = result.rows[0];
+        if (!tour) throw new NotFoundError(`No user: ${username}`);
+        
+        return tour;
+      }
+
+
+
   
     /** Delete given user from database; returns undefined. */
   
-    static async remove(username) {
-      let result = await db.query(
-            `DELETE
-             FROM users
-             WHERE username = $1
-             RETURNING username`,
-          [username],
-      );
-      const user = result.rows[0];
+  //   static async remove(username) {
+  //     let result = await db.query(
+  //           `DELETE
+  //            FROM users
+  //            WHERE username = $1
+  //            RETURNING username`,
+  //         [username],
+  //     );
+  //     const user = result.rows[0];
   
-      if (!user) throw new NotFoundError(`No user: ${username}`);
-    }
+  //     if (!user) throw new NotFoundError(`No tou`);
+  //   }
   }
   
   
