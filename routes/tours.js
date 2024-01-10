@@ -93,7 +93,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
             return next(e)
         }
     })
-    // DELETE / => {deleted: tour_id}
+    // DELETE / => {deleted: tour_id} only for users who own the tour
     router.delete("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
         try{
             const tour_id = req.params.tour_id

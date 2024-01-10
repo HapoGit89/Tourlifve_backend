@@ -28,7 +28,8 @@ class User {
           `SELECT id,
                   username,
                   email,
-                  image_url
+                  image_url,
+                  isadmin  AS "isAdmin"
            FROM users
            WHERE username = $1`,
         [username],
@@ -49,6 +50,7 @@ class User {
       
       if (isValid === true) {
         delete user.password;
+        console.log(user)
         return user;
       }
     }
@@ -83,14 +85,16 @@ class User {
           `INSERT INTO users
            (username,
             email,
-            image_url
+            image_url,
+            isAdmin
             )
-           VALUES ($1, $2, $3)
-           RETURNING id, username, email`,
+           VALUES ($1, $2, $3, $4)
+           RETURNING id, username, email, isAdmin`,
         [
           username,
           email,
           image_url,
+          false
         ],
     );
 

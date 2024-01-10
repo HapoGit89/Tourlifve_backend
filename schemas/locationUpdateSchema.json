@@ -3,28 +3,33 @@
     "$id": "http://example.com/example.json",
     "type": "object",
     "properties": {
-      "title": {
+      "name": {
         "type": "string",
         "minLength": 1,
         "maxLength": 30
       },
-      "start": {
+      "country": {
         "type": "string",
         "minLength": 0,
         "maxLength": 60
       },
-      "end": {
+      "city": {
         "type": "string",
         "minLength": 0,
         "maxLength": 60
       },
-      "user_id": {
-        "type": "number",
+      "postal_code": {
+        "type": "string",
         "minLength": 0,
         "maxLength": 60
        
       },
-      "artist": {
+      "street": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60 
+      },
+      "number": {
         "type": "string",
         "minLength": 0,
         "maxLength": 60 
@@ -32,6 +37,5 @@
     },
     "additionalProperties": false,
     "required": [
-      
     ]
   }
