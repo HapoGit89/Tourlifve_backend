@@ -23,7 +23,6 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
           const errs = validator.errors.map(e => e.stack);
           throw new BadRequestError(errs);
         }
-        const {name, country, city, postal_code, street, number, googleplaces_id} = req.body
 
         const location = await Location.createLocation(req.body)
         return res.json({location:location})
@@ -32,5 +31,16 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         return next(e)
     }
     })
+
+    router.get("/", ensureLoggedIn, async(req,res, next)=>{
+        try{
+           
+            const locations = await Location.findAll()
+            return res.json(locations)
+        }
+        catch(e){
+            return next(e)
+        }
+        })
 
     module.exports = router;

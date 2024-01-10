@@ -56,6 +56,28 @@ class Location {
       return location;
     }
 
+      /** Find all locations.
+   *
+   * Returns [{ name, country, city, street, postal_code, number, googleplaces_id}, ...]
+   **/
+
+  static async findAll() {
+    const result = await db.query(
+          `SELECT name,
+                  country,
+                  city,
+                  postal_code,
+                  street,
+                  housenumber,
+                  googleplaces_id      
+           FROM locations
+           ORDER BY name`,
+    );
+  
+
+    return result.rows;
+  }
+
 //   /** Register user with data.
 //    *
 //    * Returns { username, firstName, lastName, email, isAdmin }
