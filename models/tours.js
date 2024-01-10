@@ -124,8 +124,6 @@ class Tour {
         return tour;
       }
 
-
-
   
     /** Delete given tour from database; returns undefined. */
   

@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 30
+      },
+      "country": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60
+      },
+      "city": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60
+      },
+      "postal_code": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60
+       
+      },
+      "street": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60 
+      },
+      "number": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60 
+      },
+      "googleplaces_id": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 100
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "name",
+      "country",
+      "city",
+      "postal_code",
+      "street",
+      "number",
+      "googleplaces_id"
+    ]
+  }
