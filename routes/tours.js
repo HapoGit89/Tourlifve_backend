@@ -57,22 +57,22 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     router.get("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
         try{
         const tour_id = req.params.tour_id
+        const response = await Tour.get(tour_id)
         const user = await User.get(res.locals.user.username)
         const testArray = user.tours.filter(el => el.id == tour_id)
-        console.log(testArray)
         if (testArray.length == 0){
             throw new UnauthorizedError
         }
-        const response = await Tour.get(tour_id)
         return res.json(response)}
     catch(e){
         return next(e)
     } })
 
-
+    // PATCH / tour:id {data}=>{tour:tour}
+    // Users can only patch own tours
     router.patch("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
         try{
-            const validator = jsonschema.validate(req.body, tourCreateSchema);
+            const validator = jsonschema.validate(req.body, tourUpdateSchema);
             if (!validator.valid) {
               const errs = validator.errors.map(e => e.stack);
               throw new BadRequestError(errs);
@@ -82,7 +82,8 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     
         
             const user = await User.get(res.locals.user.username)
-            if(user_id != user.id){
+            const testArray = user.tours.filter(el => el.id == tour_id)
+            if (testArray.length == 0){
                 throw new UnauthorizedError
             }
             const tour = await Tour.update(tour_id,req.body)
@@ -92,4 +93,21 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
             return next(e)
         }
     })
+    // DELETE / => {deleted: tour_id}
+    router.delete("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
+        try{
+            const tour_id = req.params.tour_id
+            const user = await User.get(res.locals.user.username)
+            const testArray = user.tours.filter(el => el.id == tour_id)
+            if (testArray.length == 0){
+                throw new UnauthorizedError
+            }
+            const tour = await Tour.remove(tour_id)
+            return res.json({deleted:tour_id})
+        }
+        catch(e){
+            return next(e)
+        }
+    })
+
  module.exports = router;

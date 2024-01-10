@@ -71,12 +71,11 @@ class Tour {
                FROM tours
                ORDER BY user_id`,
         );
-      
           result.rows.forEach((el)=>el.startdate=unix.toDate(Number(el.startdate)))
           result.rows.forEach((el)=>el.enddate=unix.toDate(Number(el.enddate)))
         return result.rows;
       }
-
+      // get tour for given tour_id
     static async get(tour_id) {
         const result = await db.query(
               `SELECT title,
@@ -89,17 +88,17 @@ class Tour {
                ORDER BY user_id`,
                [tour_id]
         );
-      
-    
+
+        if (result.rows.length ==0){
+          throw new NotFoundError(`No tour: ${tour_id}`)
+        }
         return result.rows;
       }
 
-
+      // update tour for given tour_id
       static async update(tour_id, data) {
-
         data.end = unix.fromDate(data.end)
         data.start= unix.fromDate(data.start)
-    
         const { setCols, values } = sqlForPartialUpdate(
            data,
             {
@@ -120,7 +119,7 @@ class Tour {
                                     user_id`;
         const result = await db.query(querySql, [...values, tour_id]);
         const tour = result.rows[0];
-        if (!tour) throw new NotFoundError(`No user: ${username}`);
+        if (!tour) throw new NotFoundError(`No tour: ${tour_id}`);
         
         return tour;
       }
@@ -128,20 +127,20 @@ class Tour {
 
 
   
-    /** Delete given user from database; returns undefined. */
+    /** Delete given tour from database; returns undefined. */
   
-  //   static async remove(username) {
-  //     let result = await db.query(
-  //           `DELETE
-  //            FROM users
-  //            WHERE username = $1
-  //            RETURNING username`,
-  //         [username],
-  //     );
-  //     const user = result.rows[0];
+    static async remove(tour_id) {
+      let result = await db.query(
+            `DELETE
+             FROM tours
+             WHERE id = $1
+             RETURNING id`,
+          [tour_id],
+      );
+      const tour = result.rows[0];
   
-  //     if (!user) throw new NotFoundError(`No tou`);
-  //   }
+      if (!tour) throw new NotFoundError(`No tour: ${tour_id}`);
+    }
   }
   
   
