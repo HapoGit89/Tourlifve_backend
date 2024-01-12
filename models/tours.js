@@ -94,7 +94,7 @@ class Tour {
         }
         return result.rows;
       }
-
+  
       // update tour for given tour_id
       static async update(tour_id, data) {
         data.end = unix.fromDate(data.end)

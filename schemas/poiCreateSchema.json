@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+      "name": {
+        "name": "string",
+        "minLength": 1,
+        "maxLength": 30
+      },
+      "type": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60
+      },
+      
+      "googleplaces_id": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 60
+      },
+      "adress": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 300
+      },
+      "googlemaps_link": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 100,
+        "format": "url"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "name",
+      "type",
+      "googleplaces_id",
+      "adress",
+      "googlemaps_link"
+    ]
+  }

@@ -6,7 +6,7 @@ const router = new express.Router();
 const jsonschema = require("jsonschema")
 const tourCreateSchema = require("../schemas/tourCreateSchema.json")
 const tourUpdateSchema = require("../schemas/tourUpdateSchema.json")
-const { ensureLoggedIn} = require("../middleware/auth");
+const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 /** POST / => {title, crew, start, end, user_id, artist} => { tour: {id, title, crew, start, end, user_id, artist} }
  *
@@ -38,8 +38,8 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     })
 
     // GET => {tours: [{tour1..}, {tour2....}]}
-    // Access only for logged in users
-    router.get("/", ensureLoggedIn, async(req,res, next)=>{
+    // Access only for Admins
+    router.get("/", ensureLoggedIn, ensureAdmin, async(req,res, next)=>{
         try{
         const response = await Tour.findAll()
         return res.json(response)}
@@ -51,7 +51,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
  *
  * Returns information on tour for given tour_id
  *
- * Authorization required: logged in, users can only see own tours
+ * Authorization required: logged in , users can only see own tours
  **/
 
     router.get("/:tour_id", ensureLoggedIn, async(req,res, next)=>{

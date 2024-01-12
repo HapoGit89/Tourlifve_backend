@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+      "tour_id": {
+        "type": "number",
+        "minLength": 1,
+        "maxLength": 30
+      },
+      "location_id": {
+        "type": "number",
+        "minLength": 1,
+        "maxLength": 60
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "tour_id",
+      "location_id"
+    ]
+  }

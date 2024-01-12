@@ -4,6 +4,7 @@ const userRoutes = require("./routes/users.js")
 const authRoutes = require("./routes/auth.js")
 const tourRoutes = require("./routes/tours.js")
 const locationRoutes = require("./routes/locations.js")
+const poiRoutes = require("./routes/pois.js")
 const { authenticateJWT } = require("./middleware/auth");
 const { NotFoundError } = require("./expressError");
 
@@ -15,6 +16,7 @@ app.use("/users", userRoutes)
 app.use("/auth", authRoutes)
 app.use("/tours", tourRoutes)
 app.use("/locations", locationRoutes)
+app.use("/pois/", poiRoutes)
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
