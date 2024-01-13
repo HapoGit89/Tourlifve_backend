@@ -12,11 +12,18 @@
         "type": "number",
         "minLength": 1,
         "maxLength": 60
+      },
+
+      "date": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
       }
     },
     "additionalProperties": false,
     "required": [
       "tour_id",
-      "location_id"
+      "location_id",
+      "date"
     ]
   }
