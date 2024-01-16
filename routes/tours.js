@@ -1,6 +1,8 @@
 const express = require('express')
 const User = require("../models/user.js")
 const Tour = require("../models/tours.js")
+const Location = require("../models/location.js")
+const Tourstop = require("../models/tourstop.js")
 const {UnauthorizedError, BadRequestError} = require("../expressError.js")
 const router = new express.Router();
 const jsonschema = require("jsonschema")
@@ -47,7 +49,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         return next(e)
     } })
 
-    /** GET /:tour_id => { tour: {title, startdate, enddate, artist, user_id} } }
+    /** GET /:tour_id => { tour: {title, startdate, enddate, artist, user_id, tourstops: [{date, location_id, tour_id}, {...}]} } }
  *
  * Returns information on tour for given tour_id
  *
@@ -60,10 +62,15 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         const response = await Tour.get(tour_id)
         const user = await User.get(res.locals.user.username)
         const testArray = user.tours.filter(el => el.id == tour_id)
-        if (testArray.length == 0){
+        // check if logged in user owns the tour or is Admin
+        if (testArray.length == 0 && !res.locals.user.isAdmin){
             throw new UnauthorizedError
         }
-        return res.json(response)}
+        const tourstops = await Tourstop.get(tour_id)
+        response.tourstops = tourstops
+        
+        
+        return res.json({tour:response})}
     catch(e){
         return next(e)
     } })
@@ -83,7 +90,8 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         
             const user = await User.get(res.locals.user.username)
             const testArray = user.tours.filter(el => el.id == tour_id)
-            if (testArray.length == 0){
+            // check if logged in user owns the tour or is Admin
+            if (testArray.length == 0 && !res.locals.user.isAdmin){
                 throw new UnauthorizedError
             }
             const tour = await Tour.update(tour_id,req.body)
@@ -99,7 +107,8 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
             const tour_id = req.params.tour_id
             const user = await User.get(res.locals.user.username)
             const testArray = user.tours.filter(el => el.id == tour_id)
-            if (testArray.length == 0){
+            // check if logged in user owns the tour or is Admin
+            if (testArray.length == 0 && !res.locals.user.isAdmin){
                 throw new UnauthorizedError
             }
             const tour = await Tour.remove(tour_id)
