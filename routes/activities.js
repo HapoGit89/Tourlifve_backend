@@ -58,5 +58,27 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         }
         })
 
+       // Deletes activity for given activity_id
+    // Only accessible for user owning the tour or admin
+    router.delete("/:activity_id", ensureLoggedIn, async(req,res, next)=>{
+        try{
+            const activity_id = req.params.activity_id
+            const activity = await Activity.getFullData(activity_id)
+            const tourstop = await Tourstop.getFullData(activity.tourstop_id)
+            const user = await User.get(res.locals.user.username)
+            const testArray = user.tours.filter(el => el.id == tourstop.tour_id)
+            if (testArray.length == 0 && !res.locals.user.isAdmin){
+                throw new UnauthorizedError
+            }
+
+            const deleted = await Activity.remove(activity_id)
+
+            return res.json({deleted: deleted})
+        }
+        catch(e){
+            return next(e)
+        }
+    })
+
 
 module.exports = router

@@ -10,11 +10,10 @@ const {
 class Activity{
 
 
-   
+// create activty
 static async createActivity(
     {poi_id, tourstop_id}) {
 
- 
   const duplicateCheck = await db.query(
         `SELECT poi_id, tourstop_id
          FROM activities
@@ -44,7 +43,7 @@ static async createActivity(
   return activity;
 } 
 
-
+// get full date for given activity_id
 static async getFullData(activity_id) {
     const result = await db.query(
           `SELECT activities.id,
@@ -67,6 +66,17 @@ static async getFullData(activity_id) {
     return result.rows[0];
   }
 
+
+   // delete activity for given activity_id
+ static async remove(activity_id) {
+    const activity = await db.query(`DELETE FROM activities
+                                    WHERE id = $1  
+                                    RETURNING tourstop_id, poi_id`,
+                                    [activity_id])
+    if (!activity){throw new NotFoundError(`No activity: ${activity_id}`)};
+    
+    return activity.rows[0];
+  }
 
 }
 
