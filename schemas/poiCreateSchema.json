@@ -8,7 +8,7 @@
         "minLength": 1,
         "maxLength": 30
       },
-      "type": {
+      "category": {
         "type": "string",
         "minLength": 0,
         "maxLength": 60
@@ -19,7 +19,7 @@
         "minLength": 0,
         "maxLength": 60
       },
-      "adress": {
+      "address": {
         "type": "string",
         "minLength": 0,
         "maxLength": 300
@@ -34,9 +34,9 @@
     "additionalProperties": false,
     "required": [
       "name",
-      "type",
+      "category",
       "googleplaces_id",
-      "adress",
+      "address",
       "googlemaps_link"
     ]
   }

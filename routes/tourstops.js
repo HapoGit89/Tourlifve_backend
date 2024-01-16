@@ -34,20 +34,19 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         return next(e)
     }
     })
-    // GET all tourstops for given tour_id {tour_id} => {tourststops: {location_id, tour_id},{...},..}
-    // accesible for tour owner or Admin
-    router.get("/:tour_id", ensureLoggedIn, async(req,res, next)=>{
+   // GET full Tourstop Infos for given tourstop_id
+    router.get("/:tourstop_id", ensureLoggedIn, async(req,res, next)=>{
         try{
-           const tour_id = req.params.tour_id
-            const tour = await Tour.get(tour_id)
+           const tourstop_id = req.params.tourstop_id
+           const tourstop = await Tourstop.getFullData(tourstop_id)
+            const tour = await Tour.get(tourstop[0].tour_id)
             const user = await User.get(res.locals.user.username)
             // check of user owns tour for tourstop or is Admin
             if (user.id != tour.user_id && !res.locals.user.isAdmin){
                 throw new UnauthorizedError
             }
             
-            const tourstops = await Tourstop.get(tour_id)
-            return res.json({tourstops:tourstops})
+            return res.json({tourstop:tourstop})
         }
         catch(e){
             return next(e)

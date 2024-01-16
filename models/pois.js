@@ -14,12 +14,12 @@ class POI {
 
         /** create POI for loggedIn user
      *
-     * {name, type, googleplaces_id, googlemaps_link, adress} => {poi:{name, type, googleplaces_id, googlemaps_link, adress}}
+     * {name, category, googleplaces_id, googlemaps_link, adress} => {poi:{name, category, googleplaces_id, googlemaps_link, adress}}
      *
      * 
      **/
         static async createPOI(
-            {name, type, googleplaces_id, googlemaps_link, adress}) {
+            {name, category, googleplaces_id, googlemaps_link, address}) {
           const duplicateCheck = await db.query(
                 `SELECT name, googleplaces_id
                  FROM pois
@@ -38,15 +38,15 @@ class POI {
           const result = await db.query(
                 `INSERT INTO pois
                  (name,
-                  type,
+                  category,
                   googlemaps_link,
                   googleplaces_id,
-                  adress
+                  address
                   )
                  VALUES ($1, $2, $3, $4, $5)
-                 RETURNING id, name, type, googleplaces_id, googlemaps_link, adress`,
+                 RETURNING id, name, category, googleplaces_id, googlemaps_link, address`,
               [
-                name, type, googlemaps_link, googleplaces_id, adress
+                name, category , googlemaps_link, googleplaces_id, address
               ],
           );
       
@@ -59,10 +59,10 @@ class POI {
             const result = await db.query(
                   `SELECT id,
                           name,
-                          type,
+                          category,
                           googlemaps_link,
                           googleplaces_id,
-                          adress
+                          address
                    FROM pois
                    ORDER BY name`,
             );
@@ -75,10 +75,10 @@ class POI {
             const result = await db.query(
                   `SELECT id,
                           name,
-                          type,
+                          category,
                           googlemaps_link,
                           googleplaces_id,
-                          adress
+                          address
                    FROM pois
                    WHERE id = $1`,
                    [poi_id]
@@ -92,10 +92,10 @@ class POI {
             const result = await db.query(
                   `SELECT id,
                           name,
-                          type,
+                          category,
                           googlemaps_link,
                           googleplaces_id,
-                          adress
+                          address
                    FROM pois
                    WHERE id = $1`,
                    [poi_id]
@@ -113,10 +113,10 @@ class POI {
            data,
             {
               name: "name",
-              type: "type",
+              category: "category",
               googlemaps_link: "googlemaps_link",
               googleplaces_id: "googleplaces_id",
-              adress: "adress"
+              address: "address"
             });
         const poiidVarIdx = "$" + (values.length + 1);
     
@@ -125,8 +125,8 @@ class POI {
                           WHERE id = ${poiidVarIdx} 
                           RETURNING id,
                                     name,
-                                    type,
-                                    adress,
+                                    category,
+                                    address,
                                     googleplaces_id,
                                     googlemaps_link`;
         const result = await db.query(querySql, [...values, poi_id]);

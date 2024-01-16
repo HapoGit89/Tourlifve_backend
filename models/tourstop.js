@@ -10,12 +10,7 @@ const unix = require("unix-timestamp")
 class Tourstop {
 
 
-    /** authenticate user with username, password.
-     *
-     * Returns { username, first_name, last_name, email, is_admin }
-     *
-     * Throws UnauthorizedError is user not found or wrong password.
-     **/
+   // create Tourstop {tour_id, location_id, date} => {id, tour_id, location_id, date}
 static async createTourstop(
     tour_id, location_id, date) {
 
@@ -74,6 +69,34 @@ static async createTourstop(
 
         return result.rows;
       }
+
+  // get full tourstop info for given tourstop_id
+  static async getFullData(tourstop_id) {
+    const result = await db.query(
+          `SELECT tourstops.id,
+                  name,
+                  country,
+                  city,
+                  street,
+                  housenumber,
+                  googleplaces_id,
+                  tourstops.tour_id,
+                  location_id,
+                  date
+           FROM tourstops JOIN locations ON tourstops.location_id = locations.id
+           WHERE tourstops.id = $1
+           ORDER BY location_id`,
+           [tourstop_id]
+    );
+
+    if (result.rows.length ==0){
+      throw new NotFoundError(`No tourstop for tourstop_id: ${tourstop_id}`)
+    }
+
+    result.rows.forEach((el)=>el.date=unix.toDate(Number(el.date)))
+
+    return result.rows[0];
+  }
 
   // get tourstops for given tour_id
   static async getbyTourstopId(tourstop_id) {
