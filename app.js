@@ -8,6 +8,7 @@ const poiRoutes = require("./routes/pois.js")
 const activityRoutes = require("./routes/activities.js")
 const tourstopRoutes = require ("./routes/tourstops.js")
 const locationNotesRoutes = require("./routes/locationNotes.js")
+const poiNotesRoutes = require("./routes/poiNotes.js")
 const { authenticateJWT } = require("./middleware/auth");
 const { NotFoundError } = require("./expressError");
 
@@ -23,6 +24,7 @@ app.use("/pois/", poiRoutes)
 app.use("/tourstops", tourstopRoutes)
 app.use("/activities", activityRoutes)
 app.use("/locationnotes", locationNotesRoutes)
+app.use("/poinotes", poiNotesRoutes )
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {

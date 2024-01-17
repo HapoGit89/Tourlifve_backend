@@ -36,12 +36,12 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     }
     })
 
-    // GET => {activity_id} => {id, tourstop_id, poi_id, poi_name, poi_type, poi, googleplaces_id, poi_googlmaps_link, poi_adress}
+    // GET => {id, location_id, user_id, note}
     router.get("/:username/:location_id", ensureLoggedIn, async(req,res, next)=>{
         try{
             const username = req.params.username
             const location_id = req.params.location_id
-            // check if logged in user owns tour for tour_id
+            // check if  params user matches logged in user
             if (username != res.locals.user.username){
                 throw new UnauthorizedError
             }
