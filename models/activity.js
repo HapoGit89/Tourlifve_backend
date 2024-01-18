@@ -59,10 +59,18 @@ static async getFullData(activity_id) {
            [activity_id]
     );
 
+    
     if (result.rows.length ==0){
       throw new NotFoundError(`No activity for activity_id: ${activity_id}`)
     }
 
+    const note = await db.query(`SELECT poinotes.id,
+                                        note
+                                        FROM activities JOIN poinotes ON activities.poi_id = poinotes.poi_id
+                                        WHERE activities.id = $1 `,
+                                        [activity_id])
+
+    result.rows[0].note = note.rows[0]
     return result.rows[0];
   }
 

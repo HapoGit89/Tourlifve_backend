@@ -112,6 +112,13 @@ static async createTourstop(
 
 activitiesforTS.rows.forEach((el)=>result.rows[0].activities.push(el))
 
+const note = await db.query (`SELECT locationnotes.id,
+                                      note 
+                              FROM tourstops JOIN locationnotes ON locationnotes.location_id = tourstops.location_id
+                              WHERE tourstops.id = $1`,
+                              [tourstop_id])
+  result.rows[0].note = note.rows[0]
+
     return result.rows[0];
   }
 
