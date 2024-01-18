@@ -12,7 +12,7 @@ class Activity{
 
 // create activty
 static async createActivity(
-    {poi_id, tourstop_id}) {
+    {poi_id, tourstop_id, traveltime, travelmode}) {
 
   const duplicateCheck = await db.query(
         `SELECT poi_id, tourstop_id
@@ -30,11 +30,13 @@ static async createActivity(
   const result = await db.query(
         `INSERT INTO activities
          (poi_id,
-         tourstop_id)
-         VALUES ($1, $2)
-         RETURNING id, poi_id, tourstop_id`,
+         tourstop_id,
+         traveltime,
+         travelmode)
+         VALUES ($1, $2, $3, $4)
+         RETURNING id, poi_id, tourstop_id. travelmode, traveltime`,
       [
-        poi_id, tourstop_id
+        poi_id, tourstop_id, traveltime, travelmode
       ],
   );
 
@@ -47,13 +49,15 @@ static async createActivity(
 static async getFullData(activity_id) {
     const result = await db.query(
           `SELECT activities.id,
-                 tourstop_id,
+                  tourstop_id,
                   poi_id,
-                  name,
-                  category,
-                  googlemaps_link,
-                  googleplaces_id,
-                  address
+                  name AS poi_name,
+                  category AS poi_category,
+                  googlemaps_link AS poi_googlemaps_link,
+                  googleplaces_id AS poi_googleplaces_id,
+                  address AS poi_address,
+                  traveltime,
+                  travelmode
            FROM activities JOIN pois ON activities.poi_id = pois.id
            WHERE activities.id = $1`,
            [activity_id]
@@ -69,8 +73,15 @@ static async getFullData(activity_id) {
                                         FROM activities JOIN poinotes ON activities.poi_id = poinotes.poi_id
                                         WHERE activities.id = $1 `,
                                         [activity_id])
+    const location = await db.query ( `SELECT locations.name,
+                                               locations.googleplaces_id,
+                                               locations.city
+                                               FROM tourstops JOIN locations ON tourstops.location_id = locations.id
+                                               WHERE tourstops.id = $1`,
+                                               [result.rows[0].tourstop_id])
 
-    result.rows[0].note = note.rows[0]
+    result.rows[0].poi_note = note.rows[0]
+    result.rows[0].location = location.rows[0]
     return result.rows[0];
   }
 

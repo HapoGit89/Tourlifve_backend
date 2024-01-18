@@ -12,12 +12,25 @@
         "type": "number",
         "minLength": 1,
         "maxLength": 60
+      },
+      "traveltime": {
+        "type": "number",
+        "minLength": 1,
+        "maxLength": 60
+      },
+      "travelmode": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 60
       }
+
     },
     "additionalProperties": false,
     "required": [
       "tourstop_id",
-      "poi_id"
+      "poi_id",
+      "traveltime",
+      "travelmode"
       
     ]
   }
