@@ -75,6 +75,26 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         return next(e)
     } })
 
+
+    router.get("/", ensureLoggedIn, async(req,res, next)=>{
+        try{
+        const tour_id = req.params.tour_id
+        const response = await Tour.get(tour_id)
+        const user = await User.get(res.locals.user.username)
+        const testArray = user.tours.filter(el => el.id == tour_id)
+        // check if logged in user owns the tour or is Admin
+        if (testArray.length == 0 && !res.locals.user.isAdmin){
+            throw new UnauthorizedError
+        }
+        const tourstops = await Tourstop.get(tour_id)
+        response.tourstops = tourstops
+        
+        
+        return res.json({tour:response})}
+    catch(e){
+        return next(e)
+    } })
+
     // PATCH / tour:id {data}=>{tour:tour}
     // Users can only patch own tours
     router.patch("/:tour_id", ensureLoggedIn, async(req,res, next)=>{

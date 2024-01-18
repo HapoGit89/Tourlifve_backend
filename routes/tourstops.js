@@ -39,7 +39,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         try{
            const tourstop_id = req.params.tourstop_id
            const tourstop = await Tourstop.getFullData(tourstop_id)
-            const tour = await Tour.get(tourstop[0].tour_id)
+            const tour = await Tour.get(tourstop.tour_id)
             const user = await User.get(res.locals.user.username)
             // check of user owns tour for tourstop or is Admin
             if (user.id != tour.user_id && !res.locals.user.isAdmin){

@@ -8,6 +8,7 @@ const {
   BadRequestError,
   UnauthorizedError,
 } = require("../expressError");
+const unix = require("unix-timestamp")
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
 
 /** Related functions for users. */
@@ -160,9 +161,14 @@ class User {
 
     user.tours = []
 
-    const tourRes = await db.query( `SELECT id, title, artist FROM tours WHERE user_id = $1`,
+    // get tours for user
+    const tourRes = await db.query( `SELECT id, title, artist, startdate, enddate FROM tours WHERE user_id = $1`,
   [user.id],
   )
+   
+  // converse timestamps to dates
+  tourRes.rows.forEach((el)=>el.startdate = unix.toDate(Number(el.startdate)))
+  tourRes.rows.forEach((el)=>el.enddate = unix.toDate(Number(el.enddate)))
 
   tourRes.rows.forEach(el=>user.tours.push(el))
 

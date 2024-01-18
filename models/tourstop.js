@@ -82,6 +82,7 @@ static async createTourstop(
                   googleplaces_id,
                   tourstops.tour_id,
                   location_id,
+                  tour_id
                   date
            FROM tourstops JOIN locations ON tourstops.location_id = locations.id
            WHERE tourstops.id = $1
@@ -94,6 +95,22 @@ static async createTourstop(
     }
 
     result.rows.forEach((el)=>el.date=unix.toDate(Number(el.date)))
+    result.rows[0].activities = []
+    const activitiesforTS = await db.query(
+      `SELECT activities.id AS activity_id,
+              pois.id AS poi_id,
+              name,
+              category,
+              address,
+              googleplaces_id,
+              googlemaps_link     
+       FROM activities JOIN pois ON activities.poi_id = pois.id
+       WHERE tourstop_id = $1
+       ORDER BY name`,
+       [tourstop_id]
+);
+
+activitiesforTS.rows.forEach((el)=>result.rows[0].activities.push(el))
 
     return result.rows[0];
   }
