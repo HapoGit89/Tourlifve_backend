@@ -9,8 +9,8 @@ const axios = require("axios")
 class GoogleDistSearch{
 
 
-// searches in GoogleDistanceMatrix for given mode, origin and destinations
-static async search(
+// Uses GoogleDistance Matrix to get distances between one origin anmd multiple destinations
+static async searchDistance(
     {origin, destinations, mode}) {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?&key=${API_KEY}`,
         {params:
@@ -30,11 +30,16 @@ static async search(
                 duration_value_secs: response.data.rows[0].elements[i].duration.value,
                 mode: mode})
         }
+        console.log(response)
        
     return formResponse
 
 
 } 
+
+static async searchNearby(){
+    
+}
 
 
 }

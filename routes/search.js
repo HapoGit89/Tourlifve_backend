@@ -8,9 +8,9 @@ const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 // POST {origin, destinations, mode} => {origin, destinations: [{address, distance, duration_text, duration_value_secs, mode},{}]}
 // Route for using the googledistancematrix
-router.post("/", async(req,res, next)=>{
+router.post("/", ensureLoggedIn, async(req,res, next)=>{
     try{
-        const resp = await GoogleDistSearch.search(req.body)
+        const resp = await GoogleDistSearch.searchDistance(req.body)
     return res.json({response:resp})}
 catch(e){
     return next(e)
