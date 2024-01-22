@@ -34,7 +34,7 @@ static async createActivity(
          traveltime,
          travelmode)
          VALUES ($1, $2, $3, $4)
-         RETURNING id, poi_id, tourstop_id. travelmode, traveltime`,
+         RETURNING id, poi_id, tourstop_id, travelmode, traveltime`,
       [
         poi_id, tourstop_id, traveltime, travelmode
       ],

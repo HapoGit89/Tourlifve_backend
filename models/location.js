@@ -16,12 +16,12 @@ class Location {
 
     /** create Location 
      *
-     * {name, country, city, postal_code, street, number, googleplaces_id} => {location: {name, country, city, postal_code, street, number, googleplaces_id}}
+     * {name, country, city, postal_code, street, number, googleplaces_id, lat, lng} => {location: {name, country, city, postal_code, street, number, googleplaces_id}}
      *
      * Throws UnauthorizedError if User is not logged in
      **/
     static async createLocation(
-        {name, country, city, postal_code, street, number, googleplaces_id}) {
+        {name, country, city, postal_code, street, number, googleplaces_id, lat, lng}) {
       const duplicateCheck = await db.query(
             `SELECT name
              FROM locations
@@ -42,12 +42,14 @@ class Location {
               postal_code,
               street,
               housenumber,
-              googleplaces_id
+              googleplaces_id,
+              lat,
+              lng
               )
-             VALUES ($1, $2, $3, $4, $5, $6, $7)
-             RETURNING name, country, city, postal_code, street, housenumber, googleplaces_id`,
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+             RETURNING name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng`,
           [
-            name, country, city, postal_code, street, number, googleplaces_id
+            name, country, city, postal_code, street, number, googleplaces_id, lat, lng
           ],
       );
   
@@ -70,7 +72,9 @@ class Location {
                   postal_code,
                   street,
                   housenumber,
-                  googleplaces_id      
+                  googleplaces_id,
+                  lat,
+                  lng     
            FROM locations
            ORDER BY name`,
     );
@@ -89,7 +93,9 @@ class Location {
                         postal_code,
                         street,
                         housenumber,
-                        googleplaces_id      
+                        googleplaces_id,
+                        lat,
+                        lng    
                    FROM locations
                    WHERE id = $1`,
                    [location_id]
@@ -125,7 +131,9 @@ class Location {
                                     street,
                                     postal_code
                                     housenumber,
-                                    googleplaces_id`;
+                                    googleplaces_id,
+                                    lat,
+                                    lng`;
         const result = await db.query(querySql, [...values, location_id]);
         const location= result.rows[0];
         if (!location) throw new NotFoundError(`No location: ${location_id}`);

@@ -6,7 +6,7 @@
         "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 30
+            "maxLength": 60
           },
           "country": {
             "type": "string",
@@ -38,7 +38,18 @@
             "type": "string",
             "minLength": 0,
             "maxLength": 100
+          },
+          "lat": {
+            "type": "number",
+            "minLength": 0,
+            "maxLength": 100
+          },
+          "lng": {
+            "type": "number",
+            "minLength": 0,
+            "maxLength": 100
           }
+          
 
     },
     "additionalProperties": false,
@@ -49,6 +60,8 @@
       "postal_code",
       "street",
       "number",
-      "googleplaces_id"
+      "googleplaces_id",
+      "lat",
+      "lng"
     ]
   }

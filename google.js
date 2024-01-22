@@ -36,7 +36,7 @@ static async searchDistance(
 
 } 
 
-static async searchNearby({lat, long, query}){
+static async searchNearby({lat, lng, query}){
     const response = await axios.post(`https://places.googleapis.com/v1/places:searchText/`, {
         textQuery: query,
 	    rankPreference: "DISTANCE",
@@ -44,24 +44,25 @@ static async searchNearby({lat, long, query}){
 		  circle: {
             center: {
                 latitude: lat,
-                longitude: long
+                longitude: lng
             }
             }
         }},{headers:
         {"X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress",
         "X-Goog-Api-Key": API_KEY
     }})
-
+        console.log(response)
         return response.data
 
 }
 
-static async combinedSearch({origin_id, mode,lat,long, query, duration}){
-    const places = await this.searchNearby({lat:lat,long:long,query:query})
+static async combinedSearch({origin_id, mode,lat,lng, query, duration}){
+    const places = await this.searchNearby({lat:lat,lng:lng,query:query})
 
     // build destinations string for Distance Search
     let destinations = ""
     places.places.forEach((el)=>destinations += `place_id:${el.id}|`)
+
 
     // Search for distances between origin and places
     let distances = await this.searchDistance({origin:`place_id:${origin_id}`, destinations: destinations, mode:mode})
