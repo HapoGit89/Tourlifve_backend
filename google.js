@@ -36,7 +36,7 @@ static async searchDistance(
 
 } 
 
-static async searchNearby({lat, lng, query}){
+static async searchNearby({lat, lng, query, category}){
     const response = await axios.post(`https://places.googleapis.com/v1/places:searchText/`, {
         textQuery: query,
 	    rankPreference: "DISTANCE",
@@ -47,18 +47,19 @@ static async searchNearby({lat, lng, query}){
                 longitude: lng
             }
             }
-        }},{headers:
-        {"X-Goog-FieldMask": "places.id,places.displayName,places.formattedAddress",
+        }
+        },
+        {headers:
+        { "X-Goog-FieldMask": "places.id,places.displayName,places.googleMapsUri,places.primaryType",
         "X-Goog-Api-Key": API_KEY
     }})
-        console.log(response)
+    
         return response.data
 
 }
 
-static async combinedSearch({origin_id, mode,lat,lng, query, duration}){
-    const places = await this.searchNearby({lat:lat,lng:lng,query:query})
-
+static async combinedSearch({origin_id, mode,lat,lng, query, duration, category}){
+    const places = await this.searchNearby({lat:lat,lng:lng,query:query, category: category})
     // build destinations string for Distance Search
     let destinations = ""
     places.places.forEach((el)=>destinations += `place_id:${el.id}|`)
@@ -71,8 +72,10 @@ static async combinedSearch({origin_id, mode,lat,lng, query, duration}){
     for (let i = 0; i < distances.destinations.length ; i++){
         distances.destinations[i].name = places.places[i].displayName.text
         distances.destinations[i].place_id = places.places[i].id
+        distances.destinations[i].googlemaps_uri = places.places[i]. googleMapsUri
+        distances.destinations[i].category = places.places[i]. primaryType
+        
     }
-
 
     // filter out destinations which dont fit the travel criteria
    distances.destinations = distances.destinations.filter((e)=> e.duration_value_secs<duration)
