@@ -188,9 +188,7 @@ class User {
    */
 
   static async update(username, data) {
-    if (data.password) {
-      hashed_password = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR);
-    }
+
 
     const { setCols, values } = sqlForPartialUpdate(
        data,
@@ -222,6 +220,8 @@ class User {
     // get userdata from user table
     const res1 = await db.query('SELECT * FROM users WHERE username = $1', [username])
     const user = res1.rows[0]
+    if (!user){throw new NotFoundError(`No user: ${username}`)
+    }
    // get password from login table using id from userdata
     const res2 = await db.query('SELECT password FROM login WHERE user_id = $1', [user.id])
 
