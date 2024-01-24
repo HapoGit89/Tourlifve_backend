@@ -22,7 +22,7 @@ class Tour {
      * Throws UnauthorizedError if user_id is not corresponding to token
      **/
     static async createTour(
-        {title, crew, start, end, user_id, artist }) {
+        {title, start, end, user_id, artist }) {
       const duplicateCheck = await db.query(
             `SELECT title, user_id
              FROM tours

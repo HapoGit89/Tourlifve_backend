@@ -51,7 +51,6 @@ class User {
       
       if (isValid === true) {
         delete user.password;
-        console.log(user)
         return user;
       }
     }
