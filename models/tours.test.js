@@ -131,3 +131,67 @@ describe("get", function () {
         }
     })
 })
+
+
+
+describe("update", function () {
+
+  
+  test("works", async function () {
+      const tours = await Tour.findAll()
+      const id = tours[0].id
+     const tour = await Tour.update(id, {title: "updated_tour"})
+
+    expect(tour).toEqual(
+      { 
+          title: "updated_tour",
+          artist: tours[0].artist,
+          startdate: expect.any(String),
+          enddate: expect.any(String),
+          user_id: tours[0].user_id}
+      
+    );
+
+  })
+
+  test("doesnt work with unknown id", async function () {
+      try {
+          const tour = await Tour.update(1298, {title: "updated_tour"})
+      }
+      catch(e){
+          expect(e instanceof NotFoundError).toBeTruthy()
+      }
+  })
+
+  
+})
+
+
+
+describe("delete", function () {
+
+  
+  test("works", async function () {
+      const tours = await Tour.findAll()
+      const id = tours[0].id
+     const tour = await Tour.remove(id)
+     try {
+     const toursearch = await Tour.get(id)}
+     catch (e){
+      expect(e instanceof NotFoundError).toBeTruthy()
+     }
+
+
+  })
+
+  test("doesnt work with unknown id", async function () {
+      try {
+          const tour = await Tour.remove(1298)
+      }
+      catch(e){
+          expect(e instanceof NotFoundError).toBeTruthy()
+      }
+  })
+
+  
+})
