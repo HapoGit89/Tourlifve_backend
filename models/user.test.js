@@ -218,7 +218,7 @@ describe("updatePassword", function () {
     });
 
 
-    test("doesn not work for unknown user", async function () {
+    test("doesnt not work for unknown user", async function () {
         try{
         const result = await User.updatePassword('u12', "testword", "testword2");
         }
@@ -240,3 +240,63 @@ describe("updatePassword", function () {
   
   
 })
+
+describe("remove", function () {
+ 
+  
+    test("works", async function () {
+      
+       await User.remove('u1');
+ 
+        const users = await User.findAll()
+
+        expect(users).toEqual([
+            {
+                username: "u2",
+                email: "u2@email.com",
+                image_url: null
+              }]
+        )
+    });
+
+    test("doenst work for unknown user", async function () {
+        try{
+      
+        await User.remove('u5');
+        }
+
+        catch(e){
+
+            expect ( e instanceof NotFoundError).toBeTruthy()
+            expect(e.message).toEqual("No user: u5")
+
+        }
+  
+        
+         
+     });
+
+
+    // test("doesnt not work for unknown user", async function () {
+    //     try{
+    //     const result = await User.updatePassword('u12', "testword", "testword2");
+    //     }
+    //     catch(e){
+    //         expect(e.message).toEqual("No user: u12")
+    //         expect(e instanceof NotFoundError).toBeTruthy()
+    //     }
+    //  });
+
+    //  test("doesn not work for wrong old word", async function () {
+    //     try{
+    //         const result = await User.updatePassword('u1', "testword23233223", "testword2");
+    //         }
+    //         catch(e){
+    //             expect(e.message).toEqual("Unauthorized")
+    //             expect(e instanceof UnauthorizedError).toBeTruthy()
+    //         }
+    //  });
+  
+  
+})
+
