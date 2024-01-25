@@ -39,7 +39,7 @@ await db.query(`INSERT INTO login(user_id, password)
     const tours = await db.query(`
       INSERT INTO tours(title, artist, startdate, enddate, user_id)
       VALUES ('tour2', 'artist2', $1, $2, $3),
-             ('tour2', 'artist1', $4, $5, $6 )
+             ('tour1', 'artist1', $4, $5, $6 )
              RETURNING id`,
              [unix.fromDate("1989-10-10"), unix.fromDate("1989-10-12"), users.rows[0].id, unix.fromDate("1989-10-20"), unix.fromDate("1989-10-27"), users.rows[1].id]);
 

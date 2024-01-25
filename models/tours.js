@@ -48,7 +48,7 @@ class Tour {
               artist
               )
              VALUES ($1, $2, $3, $4, $5)
-             RETURNING title, startdate, enddate, user_id, artist`,
+             RETURNING id, title, startdate, enddate, user_id, artist`,
           [
             title, startunix, endunix, user_id, artist
           ],
@@ -89,9 +89,14 @@ class Tour {
                [tour_id]
         );
 
+      
+
         if (result.rows.length ==0){
           throw new NotFoundError(`No tour: ${tour_id}`)
         }
+        result.rows[0].startdate = unix.toDate(Number(result.rows[0].startdate))
+        result.rows[0].enddate = unix.toDate(Number(result.rows[0].enddate))
+        
         return result.rows[0];
       }
   
