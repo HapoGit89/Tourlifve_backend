@@ -21,7 +21,7 @@ class Location {
      * Throws UnauthorizedError if User is not logged in
      **/
     static async createLocation(
-        {name, country, city, postal_code, street, number, googleplaces_id, lat, lng}) {
+        {name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng}) {
       const duplicateCheck = await db.query(
             `SELECT name
              FROM locations
@@ -49,7 +49,7 @@ class Location {
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
              RETURNING name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng`,
           [
-            name, country, city, postal_code, street, number, googleplaces_id, lat, lng
+            name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng
           ],
       );
   
@@ -129,7 +129,7 @@ class Location {
                                     country,
                                     city,
                                     street,
-                                    postal_code
+                                    postal_code,
                                     housenumber,
                                     googleplaces_id,
                                     lat,
