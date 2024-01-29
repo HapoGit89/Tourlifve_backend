@@ -79,8 +79,8 @@ await db.query(`INSERT INTO login(user_id, password)
           googleplaces_id,
           address
           )
-         VALUES ('poi1', 'restaurant', 'www.google.de', 'abcd', 'adress1'),
-         ('poi2', 'restaurant', 'www.google.de', 'abcde', 'adress2')`
+         VALUES ('poi1', 'restaurant', 'www.google.de', 'abcd', 'address1'),
+         ('poi2', 'restaurant', 'www.google.de', 'abcde', 'address2')`
   );
 
 

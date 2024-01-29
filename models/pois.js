@@ -85,24 +85,7 @@ class POI {
             );
           
         
-            return result.rows;
-          }
-
-          static async update(poi_id) {
-            const result = await db.query(
-                  `SELECT id,
-                          name,
-                          category,
-                          googlemaps_link,
-                          googleplaces_id,
-                          address
-                   FROM pois
-                   WHERE id = $1`,
-                   [poi_id]
-            );
-          
-        
-            return result.rows;
+            return result.rows[0];
           }
 
 

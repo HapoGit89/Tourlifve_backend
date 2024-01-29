@@ -117,12 +117,12 @@ const note = await db.query (`SELECT locationnotes.id,
                               FROM tourstops JOIN locationnotes ON locationnotes.location_id = tourstops.location_id
                               WHERE tourstops.id = $1`,
                               [tourstop_id])
-  result.rows[0].note = note.rows[0]
+  result.rows[0].location_note = note.rows[0]
 
     return result.rows[0];
   }
 
-  // get tourstops for given tour_id
+  // get tourstop for given tourstop_id
   static async getbyTourstopId(tourstop_id) {
     const result = await db.query(
           `SELECT id,

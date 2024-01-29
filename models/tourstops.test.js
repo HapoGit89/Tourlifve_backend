@@ -63,9 +63,9 @@ describe("createTourstop", function () {
         )
         const id = tours.rows[0].id
 
-        const tourstop = await Tourstop.get(id)
+        const tourstops = await Tourstop.get(id)
 
-      expect(tourstop).toEqual([
+      expect(tourstops).toEqual([
         {   id: expect.any(Number),
             city: expect.any(String),
             date: expect.any(Date),
@@ -76,105 +76,140 @@ describe("createTourstop", function () {
         )
 })
 
+test("doesnt work with unknown id", async function () {
+    try {
+
+
+   await Tourstop.get(38882)
+
+    }
+    catch(e){
+        expect (e instanceof NotFoundError).toBeTruthy()
+
+    }
+    
+})
+
   })
 
-// describe("get", function () {
+
+  describe("getFullData", function () {
 
   
-//     test("works", async function () {
-//         const locations = await Location.findAll()
-//         const id = locations[0].id
-//         const location= await Location.get(id)
+    test("works", async function () {
+        const tourstops = await db.query(
+            'SELECT id FROM tourstops'
+        )
 
-//       expect(location).toEqual(
-//         { 
-//             name: "Location1",
-//             country: "Country1",
-//             city: "city1",
-//             postal_code:"55434",
-//             street: "street1",
-//             housenumber: "1",
-//             googleplaces_id:"abcde",
-//             lat: 8.0,
-//             lng:42.0
-//           }
-        
-//       );
-
-//     })
-
-//     test("doesnt work with unknown id", async function () {
-//         try {
-//             const tour = await Location.get(12989)
-//         }
-//         catch(e){
-//             expect(e instanceof NotFoundError).toBeTruthy()
-//         }
-//     })
-// })
-
-
-
-// describe("update", function () {
-
-  
-//   test("works", async function () {
-//       const locations = await Location.findAll()
-//       const id = locations[0].id
-//      const location = await Location.update(id, {name: "LOlocation"})
-
-//     expect(location).toEqual(
-//         { 
-//             name: "LOlocation",
-//             country: "Country1",
-//             city: "city1",
-//             postal_code:"55434",
-//             street: "street1",
-//             housenumber: "1",
-//             googleplaces_id:"abcde",
-//             lat: 8.0,
-//             lng:42.0
-//           }
+        const Details = await Tourstop.getFullData(tourstops.rows[0].id)
+        expect(Details).toEqual(
+            {  
+            activities: [],
+            city: "city1",
+            country: "Country1",
+            date: expect.any(Date),
+            googleplaces_id: "abcde",
+            housenumber: "1",
+            id: tourstops.rows[0].id,
+            location_id: expect.any(Number),
+            name: "Location1",
+            location_note: undefined,
+            street: "street1",
+            tour_id: expect.any(Number),}
+        )
       
-//     );
+})
 
-//   })
+test("doesnt work with unknown id", async function () {
+    try {
 
-//   test("doesnt work with unknown id", async function () {
-//       try {
-//           const locationnoteidVarIdx = await Location.update(13298, {name: "updated_location"})
-//       }
-//       catch(e){
-//           expect(e instanceof NotFoundError).toBeTruthy()
-//       }
-//   })
+
+   await Tourstop.getFullData(388382)
+
+    }
+    catch(e){
+        expect (e instanceof NotFoundError).toBeTruthy()
+
+    }
+    
+})
+
+  })
+
+
+
+describe("update", function () {
 
   
-// })
+  test("works", async function () {
+
+    const tourstop = await db.query('SELECT id FROM tourstops')
+
+    const updated = await Tourstop.update(tourstop.rows[0].id, {date: "1989-06-01"})
+    
+
+    expect(updated).toEqual(
+        { 
+            location_id: expect.any(Number),
+            tour_id: expect.any(Number),
+            date: "612662400",
+            id: tourstop.rows[0].id
+
+          }
+      
+    );
+
+  })
+
+  test("doesnt work with unknown id", async function () {
+      try {
+        const updated = await Tourstop.update(329009, {date: "1989-06-01"})
+      }
+      catch(e){
+          expect(e instanceof NotFoundError).toBeTruthy()
+      }
+  })
 
 
-
-// describe("remove", function () {
+  test("doesnt work with bad data format", async function () {
+    try {
+        const tourstop = await db.query('SELECT id FROM tourstops')
+      const updated = await Tourstop.update(tourstop.rows[0].id, {date: "19893-06-01"})
+    }
+    catch(e){
+        expect(e instanceof BadRequestError).toBeTruthy()
+    }
+})
 
   
-//   test("works", async function () {
-//       const locations = await Location.findAll()
-//       const id = locations[0].id
-//      const tour = await Location.remove(id)
-//      try {
-//      const locationsearch = await Location.get(id)}
-//      catch (e){
-//       expect(e instanceof NotFoundError).toBeTruthy()
-//      }
+})
 
 
-//   })
 
-//   test("doesnt work with unknown id", async function () {
-//       try {
-//           const location = await Location.remove(1298)
-//       }
-//       catch(e){
-//           expect(e instanceof NotFoundError).toBeTruthy()
-//       }
-//  
+describe("remove", function () {
+
+  
+  test("works", async function () {
+    const tourstop = await db.query('SELECT id FROM tourstops')
+    await Tourstop.remove(tourstop.rows[0].id)
+    try{
+        const result = await Tourstop.getFullData(tourstop.rows[0].id)
+    }
+    catch (e){
+        expect ( e instanceof NotFoundError).toBeTruthy()
+    }
+
+  })
+
+  test("doesnt work with unknown id", async function () {
+      try {
+          const tourstop = await Tourstop.remove(12982)
+      }
+      catch(e){
+          expect(e instanceof NotFoundError).toBeTruthy()
+      }
+ 
+
+    })
+
+})
