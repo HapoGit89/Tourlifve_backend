@@ -43,21 +43,21 @@ await db.query(`INSERT INTO login(user_id, password)
              RETURNING id`,
              [unix.fromDate("1989-10-10"), unix.fromDate("1989-10-12"), users.rows[0].id, unix.fromDate("1989-10-20"), unix.fromDate("1989-10-27"), users.rows[1].id]);
 
-//     const locations = await db.query(`
-//     INSERT INTO locations (name,
-//         country,
-//         city,
-//         postal_code,
-//         street,
-//         housenumber,
-//         googleplaces_id,
-//         lat,
-//         lng
-//         )
-//     VALUES ('Location1', 'Country1', 'city1', '55434', 'street1', '1', 'abcde', 8.0, 42.0),
-//             ('Location2', 'Country2', 'city2', '55435', 'street2', '2', 'abcde', 9.0, 42.0)
-//             RETURNING id`
-//     );
+    const locations = await db.query(`
+    INSERT INTO locations (name,
+        country,
+        city,
+        postal_code,
+        street,
+        housenumber,
+        googleplaces_id,
+        lat,
+        lng
+        )
+    VALUES ('Location1', 'Country1', 'city1', '55434', 'street1', '1', 'abcde', 8.0, 42.0),
+            ('Location2', 'Country2', 'city2', '55435', 'street2', '2', 'abcde', 9.0, 42.0)
+            RETURNING id`
+    );
 
 //     await db.query(`
 //     INSERT INTO tourstops

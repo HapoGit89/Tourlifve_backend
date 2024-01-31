@@ -29,7 +29,7 @@
             "minLength": 0,
             "maxLength": 60 
           },
-          "number": {
+          "housenumber": {
             "type": "string",
             "minLength": 0,
             "maxLength": 60 
@@ -59,7 +59,7 @@
       "city",
       "postal_code",
       "street",
-      "number",
+      "housenumber",
       "googleplaces_id",
       "lat",
       "lng"

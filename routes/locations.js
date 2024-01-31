@@ -10,7 +10,7 @@ const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 
 
-/** POST / => {name, country, city, postal_code, street, number, info, googleplaces_id, lat, lng} => { location: {id, name, country, city, postal_code, street, number, info, googleplaces_id} }
+/** POST / => {name, country, city, postal_code, street, number, googleplaces_id, lat, lng} => { location: {id, name, country, city, postal_code, street, number, info, googleplaces_id} }
  *
  * Creates new tour in tour table
  *
@@ -37,7 +37,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         try{
            
             const locations = await Location.findAll()
-            return res.json(locations)
+            return res.json({locations:locations})
         }
         catch(e){
             return next(e)
