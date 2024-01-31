@@ -23,7 +23,7 @@ catch(e){
 }
 })
 
-/** GET /:username => { user: {username, email, image_url } }
+/** GET /:username => { user: {username, email, image_url, tours:[] } }
  *
  * Returns information on user for given username
  *
@@ -36,7 +36,7 @@ router.get("/:username", ensureLoggedIn, async function (req, res, next) {
         throw new UnauthorizedError
       }
       const user = await User.get(req.params.username);
-      return res.json({ user });
+      return res.json(user);
     } catch (err) {
       return next(err);
     }

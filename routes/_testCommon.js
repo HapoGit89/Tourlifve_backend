@@ -17,31 +17,31 @@ async function commonBeforeAll() {
  
 
   
-//   const users=await db.query(`
-//         INSERT INTO users(username,
-//                           email,
-//                           isAdmin)
-//         VALUES ('u1', 'u1@email.com', false),
-//                ('u2', 'u2@email.com', true)
-//         RETURNING id, username, email`,
-//      );
+  const users=await db.query(`
+        INSERT INTO users(username,
+                          email,
+                          isAdmin)
+        VALUES ('u1', 'u1@email.com', false),
+               ('u2', 'u2@email.com', true)
+        RETURNING id, username, email`,
+     );
 
-// await db.query(`INSERT INTO login(user_id, password)
-//                 VALUES ($1,$2), ($3, $4)`,
-//                 [   users.rows[0].id,
-//                     await bcrypt.hash("password1", BCRYPT_WORK_FACTOR),
-//                     users.rows[1].id,
-//                     await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
-//                   ])
+await db.query(`INSERT INTO login(user_id, password)
+                VALUES ($1,$2), ($3, $4)`,
+                [   users.rows[0].id,
+                    await bcrypt.hash("password1", BCRYPT_WORK_FACTOR),
+                    users.rows[1].id,
+                    await bcrypt.hash("password2", BCRYPT_WORK_FACTOR),
+                  ])
 
 
  
-//     const tours = await db.query(`
-//       INSERT INTO tours(title, artist, startdate, enddate, user_id)
-//       VALUES ('tour2', 'artist2', $1, $2, $3),
-//              ('tour1', 'artist1', $4, $5, $6 )
-//              RETURNING id`,
-//              [unix.fromDate("1989-10-10"), unix.fromDate("1989-10-12"), users.rows[0].id, unix.fromDate("1989-10-20"), unix.fromDate("1989-10-27"), users.rows[1].id]);
+    const tours = await db.query(`
+      INSERT INTO tours(title, artist, startdate, enddate, user_id)
+      VALUES ('tour2', 'artist2', $1, $2, $3),
+             ('tour1', 'artist1', $4, $5, $6 )
+             RETURNING id`,
+             [unix.fromDate("1989-10-10"), unix.fromDate("1989-10-12"), users.rows[0].id, unix.fromDate("1989-10-20"), unix.fromDate("1989-10-27"), users.rows[1].id]);
 
 //     const locations = await db.query(`
 //     INSERT INTO locations (name,
