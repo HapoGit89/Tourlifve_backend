@@ -10,7 +10,7 @@ const tourCreateSchema = require("../schemas/tourCreateSchema.json")
 const tourUpdateSchema = require("../schemas/tourUpdateSchema.json")
 const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
-/** POST / => {title, crew, start, end, user_id, artist} => { tour: {id, title, crew, start, end, user_id, artist} }
+/** POST / => {title, start, end, user_id, artist} => { tour: {id, title, crew, start, end, user_id, artist} }
  *
  * Creates new tour in tour table
  *
@@ -24,7 +24,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
           const errs = validator.errors.map(e => e.stack);
           throw new BadRequestError(errs);
         }
-        const {title, crew, start, end, user_id, artist} = req.body
+        const {title, start, end, user_id, artist} = req.body
 
     
         const user = await User.get(res.locals.user.username)
@@ -44,7 +44,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
     router.get("/", ensureLoggedIn, ensureAdmin, async(req,res, next)=>{
         try{
         const response = await Tour.findAll()
-        return res.json(response)}
+        return res.json({tours:response})}
     catch(e){
         return next(e)
     } })
@@ -66,34 +66,19 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
         if (testArray.length == 0 && !res.locals.user.isAdmin){
             throw new UnauthorizedError
         }
-        const tourstops = await Tourstop.get(tour_id)
-        response.tourstops = tourstops
-        
-        
-        return res.json({tour:response})}
-    catch(e){
-        return next(e)
-    } })
-
-
-    router.get("/", ensureLoggedIn, async(req,res, next)=>{
         try{
-        const tour_id = req.params.tour_id
-        const response = await Tour.get(tour_id)
-        const user = await User.get(res.locals.user.username)
-        const testArray = user.tours.filter(el => el.id == tour_id)
-        // check if logged in user owns the tour or is Admin
-        if (testArray.length == 0 && !res.locals.user.isAdmin){
-            throw new UnauthorizedError
-        }
         const tourstops = await Tourstop.get(tour_id)
-        response.tourstops = tourstops
+        response.tourstops = tourstops}
+        catch(e){
+            response.tourstops = []
+        }
         
         
         return res.json({tour:response})}
     catch(e){
         return next(e)
     } })
+
 
     // PATCH / tour:id {data}=>{tour:tour}
     // Users can only patch own tours

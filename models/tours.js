@@ -22,7 +22,7 @@ class Tour {
      * Throws UnauthorizedError if user_id is not corresponding to token
      **/
     static async createTour(
-        {title, start, end, user_id, artist }) {
+        {title, startdate, enddate, user_id, artist }) {
       const duplicateCheck = await db.query(
             `SELECT title, user_id
              FROM tours
@@ -36,8 +36,8 @@ class Tour {
  
       // convert start and enddates to unix timestamp
 
-      const endunix = unix.fromDate(end)
-      const startunix = unix.fromDate(start)
+      const endunix = unix.fromDate(enddate)
+      const startunix = unix.fromDate(startdate)
       // Insert tourdata into db
       const result = await db.query(
             `INSERT INTO tours

@@ -16,7 +16,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
   afterEach(commonAfterEach);
   afterAll(commonAfterAll);
 
-  // get a token 
+
 
 
   describe("GET /", ()=>{
