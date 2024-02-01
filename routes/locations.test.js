@@ -101,153 +101,79 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
                 )
             })
 
-            // test("doesnt work with unknown tour_id ", async ()=>{
-            //     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-            //     const token = res1.body.token
-            //     try{
-            //     const res3 = await request(app).get(`/tours/29383929`).set('authorization', token)
-            //     }
-            //     catch(e){
-            //         expect(e instanceof NotFoundError).toBeTruthy()
-            //     }
+            test("doesnt work with unknown location_id ", async ()=>{
+                const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
+                const token = res1.body.token
+                try{
+                const res3 = await request(app).get(`/locations/29383929`).set('authorization', token)
+                }
+                catch(e){
+                    expect(e instanceof NotFoundError).toBeTruthy()
+                }
                 
-            // })
-            // test("does not work for logged in users who are not owning the tour", async ()=>{
-            //     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-            //     const token = res1.body.token
-            //     const res2= await request(app).get("/users/u1").set('authorization', token)
-            //     const tour_id = res2.body.tours[0].id
-            //     const res3 = await request(app).post("/auth/token").send({username:"u2", password: "password2"})
-            //     const token2 = res3.body.token
-            //     try{
-            //         const res4 = await request(app).get(`/tours/${tour_id}`).set('authorization', token2)}
-            //     catch(e){
-            //         expect(e instanceof UnauthorizedError).toBeTruthy()
-            //     }
-            //  })
+            })
+            test("does not work for anon", async ()=>{
+                const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
+                const token = res1.body.token
+                const res2= await request(app).get("/locations").set('authorization', token)
+                const location_id = res2.body.locations[0].id
+               
+                try{
+                    const res3 = await request(app).get(`/locations/${location_id}`).set('authorization', "blah")
+                }
+                catch(e){
+                    expect(e instanceof UnauthorizedError).toBeTruthy()
+                }
+             })
     
             })
 
 
-//         describe("PATCH /:tour_id", ()=>{
-//                 test("works ", async ()=>{
-//                     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                     const token = res1.body.token
-//                     const res2= await request(app).get("/users/u1").set('authorization', token)
-//                     const tour_id = res2.body.tours[0].id
-//                     const res3 = await request(app).patch(`/tours/${tour_id}`).set('authorization', token).send({title: "LOLTour"})
-//                     expect(res3.body).toEqual({
-//                         tour: {
-//                         artist: "artist2",
-//                         enddate: expect.any(String),
-//                         startdate: expect.any(String),
-//                         title: "LOLTour",
-//                         user_id: expect.any(Number),
-//                                }
-//                     }
-//                     )
-//                 })
-    
-//                 test("doesnt work with unknown tour_id ", async ()=>{
-//                     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                     const token = res1.body.token
-//                     try{
-//                     const res3 = await request(app).patch(`/tours/29383929`).set('authorization', token).send({title: "LOL"})
-//                     }
-//                     catch(e){
-//                         expect(e instanceof NotFoundError).toBeTruthy()
-//                     }
-//                 })
 
-           
-//                 test("does not work for logged in users who are not owning the tour", async ()=>{
-//                     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                     const token = res1.body.token
-//                     const res2= await request(app).get("/users/u1").set('authorization', token)
-//                     const tour_id = res2.body.tours[0].id
-//                     const res3 = await request(app).post("/auth/token").send({username:"u2", password: "password2"})
-//                     const token2 = res3.body.token
-//                     try{
-//                         const res4 = await request(app).patch(`/tours/${tour_id}`).set('authorization', token2).send({title:"LOL"})}
-//                     catch(e){
-//                         expect(e instanceof UnauthorizedError).toBeTruthy()
-//                     }
-//                  })
-
-//                  test("does not work for anon", async ()=>{
-//                     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                     const token = res1.body.token
-//                     const res2= await request(app).get("/users/u1").set('authorization', token)
-//                     const tour_id = res2.body.tours[0].id
-//                     try{
-//                         const res4 = await request(app).patch(`/tours/${tour_id}`).set('authorization', "blah").send({title:"LOL"})}
-//                     catch(e){
-//                         expect(e instanceof UnauthorizedError).toBeTruthy()
-//                     }
-//                  })
-        
-//                 })
-
-
-
-// describe("DELETE /:tour_id", ()=>{
-//             test("works ", async ()=>{
-//                     const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                     const token = res1.body.token
-//                     const res2= await request(app).get("/users/u1").set('authorization', token)
-//                     const tour_id = res2.body.tours[0].id
-//                     const res3 = await request(app).delete(`/tours/${tour_id}`).set('authorization', token)
-//                     expect(res3.body).toEqual({
-//                         deleted: `${tour_id}`  
-//                                    }
-//                         )
-//                     try{
-//                         await request(app).get(`/tours/${tour_id}`).set('authorization', token)
-//                     }
-//                     catch(e){
-//                         expect(e instanceof NotFoundError).toBeTruthy()
-//                     }
-//                     })
+describe("DELETE /:tour_id", ()=>{
+            test("works ", async ()=>{
+                    const res1 = await request(app).post("/auth/token").send({username:"u2", password: "password2"})
+                    const token = res1.body.token
+                    const res2= await request(app).get("/locations").set('authorization', token)
+                    const location_id = res2.body.locations[0].id
+                    const res3 = await request(app).delete(`/locations/${location_id}`).set('authorization', token)
+                    expect(res3.body).toEqual({
+                        deleted: `${location_id}`  
+                                   }
+                        )
+                    try{
+                        await request(app).get(`/locations/${location_id}`).set('authorization', token)
+                    }
+                    catch(e){
+                        expect(e instanceof NotFoundError).toBeTruthy()
+                    }
+                    })
                 
         
-//                     test("doesnt work with unknown tour_id ", async ()=>{
-//                         const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                         const token = res1.body.token
-//                         try{
-//                         const res3 = await request(app).delete(`/tours/29383929`).set('authorization', token).send({title: "LOL"})
-//                         }
-//                         catch(e){
-//                             expect(e instanceof NotFoundError).toBeTruthy()
-//                         }
-//                     })
+                    test("doesnt work with unknown location_id ", async ()=>{
+                        const res1 = await request(app).post("/auth/token").send({username:"u2", password: "password2"})
+                    const token = res1.body.token
+                      try{
+                            const res3 = await request(app).delete(`/locations/238888`).set('authorization', token)
+                        }
+                        catch(e){
+                            expect(e instanceof NotFoundError).toBeTruthy()
+                        }
+                    })
     
                
-//                     test("does not work for logged in users who are not owning the tour", async ()=>{
-//                         const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                         const token = res1.body.token
-//                         const res2= await request(app).get("/users/u1").set('authorization', token)
-//                         const tour_id = res2.body.tours[0].id
-//                         const res3 = await request(app).post("/auth/token").send({username:"u2", password: "password2"})
-//                         const token2 = res3.body.token
-//                         try{
-//                              await request(app).delete(`/tours/${tour_id}`).set('authorization', token2)}
-//                         catch(e){
-//                             expect(e instanceof UnauthorizedError).toBeTruthy()
-//                         }
-//                      })
+                    test("does not work for non admins logged in users", async ()=>{
+                        const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
+                        const token = res1.body.token
+                        const res2= await request(app).get("/locations").set('authorization', token)
+                        const location_id = res2.body.locations[0].id
+                        try{
+                            const res3 = await request(app).delete(`/locations/${location_id}`).set('authorization', token)}
+                        catch(e){
+                            expect(e instanceof UnauthorizedError).toBeTruthy()
+                        }
+                     })
     
-//                      test("does not work for anon", async ()=>{
-//                         const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
-//                         const token = res1.body.token
-//                         const res2= await request(app).get("/users/u1").set('authorization', token)
-//                         const tour_id = res2.body.tours[0].id
-//                         try{
-//                             const res4 = await request(app).delete(`/tours/${tour_id}`).set('authorization', "blah")}
-//                         catch(e){
-//                             expect(e instanceof UnauthorizedError).toBeTruthy()
-//                         }
-//                      })
-            
-//                     })
+                })
     
     
