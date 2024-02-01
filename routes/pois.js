@@ -9,7 +9,7 @@ const jsonschema = require("jsonschema")
 const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 
-/** POST / => {name, type, info, , adress, googleplaces_id} => { poi: {id, name, type, info, , adress, googleplaces_id, info} }
+/** POST / => {name, category, address, googlemaps_link, googleplaces_id} => { poi: {id, name, type, info, , adress, googleplaces_id, info} }
  *
  * Creates new poi in poi table
  *

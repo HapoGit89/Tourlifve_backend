@@ -71,17 +71,17 @@ await db.query(`INSERT INTO login(user_id, password)
 
    
 
-//     await db.query(
-//         `INSERT INTO pois
-//          (name,
-//           category,
-//           googlemaps_link,
-//           googleplaces_id,
-//           address
-//           )
-//          VALUES ('poi1', 'restaurant', 'www.google.de', 'abcd', 'address1'),
-//          ('poi2', 'restaurant', 'www.google.de', 'abcde', 'address2')`
-//   );
+    await db.query(
+        `INSERT INTO pois
+         (name,
+          category,
+          googlemaps_link,
+          googleplaces_id,
+          address
+          )
+         VALUES ('poi1', 'restaurant', 'www.google.de', 'abcd', 'address1'),
+         ('poi2', 'restaurant', 'www.google.de', 'abcde', 'address2')`
+  );
 
 
 }
