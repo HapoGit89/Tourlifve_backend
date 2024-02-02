@@ -1,7 +1,7 @@
 const express = require('express')
 const {UnauthorizedError, BadRequestError} = require("../expressError.js")
 const router = new express.Router();
-const GoogleDistSearch = require ("../google.js")
+const GoogleDistSearch = require ("../models/google.js")
 const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 

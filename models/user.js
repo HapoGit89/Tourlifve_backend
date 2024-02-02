@@ -10,17 +10,7 @@ const {
 } = require("../expressError");
 const unix = require("unix-timestamp")
 const { BCRYPT_WORK_FACTOR } = require("../config.js");
-const {
-  commonBeforeAll,
-  commonBeforeEach,
-  commonAfterEach,
-  commonAfterAll,
-} = require("./_testCommon");
 
-beforeAll(commonBeforeAll);
-beforeEach(commonBeforeEach);
-afterEach(commonAfterEach);
-afterAll(commonAfterAll);
 
 /** Related functions for users. */
 
