@@ -59,15 +59,15 @@ await db.query(`INSERT INTO login(user_id, password)
             RETURNING id`
     );
 
-//     await db.query(`
-//     INSERT INTO tourstops
-//     (tour_id,
-//     location_id, date)
-//     VALUES ($1,$2,$3),
-//     ($4,$5,$6)
-//     RETURNING id, tour_id, location_id, date`,
-//     [tours.rows[0].id, locations.rows[0].id,unix.fromDate("1989-10-11"), tours.rows[1].id, locations.rows[1].id, unix.fromDate("1989-10-25")]
-//     );
+    await db.query(`
+    INSERT INTO tourstops
+    (tour_id,
+    location_id, date)
+    VALUES ($1,$2,$3),
+    ($4,$5,$6)
+    RETURNING id, tour_id, location_id, date`,
+    [tours.rows[0].id, locations.rows[0].id,unix.fromDate("1989-10-11"), tours.rows[1].id, locations.rows[1].id, unix.fromDate("1989-10-25")]
+    );
 
    
 

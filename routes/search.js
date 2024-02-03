@@ -24,7 +24,7 @@ router.post("/nearby", ensureLoggedIn, async(req,res, next)=>{
         const resp = await GoogleDistSearch.searchNearby(req.body)
     return res.json(resp)}
 catch(e){
-    console.log(e)
+    
     return next(e)
 } })
 
@@ -36,7 +36,6 @@ router.post("/complex", ensureLoggedIn, async(req,res, next)=>{
         const resp = await GoogleDistSearch.combinedSearch(req.body)
     return res.json(resp)}
 catch(e){
-    console.log(e)
     return next(e)
 } })
 

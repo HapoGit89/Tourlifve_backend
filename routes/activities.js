@@ -10,7 +10,7 @@ const activityCreateSchema = require("../schemas/activityCreateSchema.json")
 const { ensureLoggedIn, ensureAdmin} = require("../middleware/auth");
 
 
-// create activity {tourstop_id, poi_id} => {activity: {id, tourstop_id, poi_id}}
+// create activity {tourstop_id, poi_id, traveltime, travelmode} => {activity: {id, tourstop_id, poi_id}}
 // for user who owns the tour
 
 router.post("/", ensureLoggedIn, async(req,res, next)=>{

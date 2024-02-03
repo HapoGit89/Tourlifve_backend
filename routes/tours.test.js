@@ -91,7 +91,16 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
                     enddate: "1989-10-12T00:00:00.000Z",
                     startdate: "1989-10-10T00:00:00.000Z",
                     title: "tour2",
-                    tourstops: [],
+                    tourstops: [ {
+                                city: "city1",
+                                 date: "1989-10-11T00:00:00.000Z",
+                                id: expect.any(Number),
+                                 location_id: expect.any(Number),
+                                 name: "Location1",
+                                 tour_id: expect.any(Number)
+                               },
+                             ],
+                  
                     user_id: expect.any(Number),
                            }
                 }
