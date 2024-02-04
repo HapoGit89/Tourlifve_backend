@@ -700,6 +700,35 @@ const combinedSearchResult = {
         ]
     }
 
+
+    const searchRouteComplexResult= {
+        origin: "Zellstraße 4, 81667 München, Germany",
+        destinations: [
+            {
+                address: "Rosenheimer Str. 10, 81669 München, Germany",
+                distance: "0.2 km",
+                duration_text: "3 mins",
+                duration_value_secs: 202,
+                mode: "walking",
+                name: "Chandani Chowk Indisches Restaurant",
+                place_id: "ChIJw_JYIrLfnUcRuMRzVpMjXAw",
+                googlemaps_uri: "https://maps.google.com/?cid=890625942030107832",
+                category: "indian_restaurant"
+            },
+            {
+                address: "Rosenheimer Str. 8, 81669 München, Germany",
+                distance: "0.2 km",
+                duration_text: "4 mins",
+                duration_value_secs: 215,
+                mode: "walking",
+                name: "Chopan - near Gasteig",
+                place_id: "ChIJ3xTjBX3fnUcRKic8QArdNFo",
+                googlemaps_uri: "https://maps.google.com/?cid=6500063198299563818",
+                category: "restaurant"
+            }
+        ]
+    }
+
   
 
-  module.exports = {axiosDistance, searchDistanceResult, combinedSearchResult, combinedSearchNearby, combinedSearchDistance}
+  module.exports = {searchRouteComplexResult, axiosDistance, searchDistanceResult, combinedSearchResult, combinedSearchNearby, combinedSearchDistance}
