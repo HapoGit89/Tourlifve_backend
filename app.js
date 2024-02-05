@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors");
 const app = express()
 const userRoutes = require("./routes/users.js")
 const authRoutes = require("./routes/auth.js")
@@ -27,6 +28,7 @@ app.use("/activities", activityRoutes)
 app.use("/locationnotes", locationNotesRoutes)
 app.use("/poinotes", poiNotesRoutes )
 app.use("/search", searchRoutes)
+app.use(cors());
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
