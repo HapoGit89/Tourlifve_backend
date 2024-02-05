@@ -16,6 +16,7 @@ const { NotFoundError } = require("./expressError");
 
 
 // parse request bodies as json
+app.use(cors());
 app.use(express.json())
 app.use(authenticateJWT);
 app.use("/users", userRoutes)
@@ -28,7 +29,7 @@ app.use("/activities", activityRoutes)
 app.use("/locationnotes", locationNotesRoutes)
 app.use("/poinotes", poiNotesRoutes )
 app.use("/search", searchRoutes)
-app.use(cors());
+
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
