@@ -82,13 +82,14 @@ static async createTourstop(
                   googleplaces_id,
                   tourstops.tour_id,
                   location_id,
-                  tour_id
+                  tour_id,
                   date
            FROM tourstops JOIN locations ON tourstops.location_id = locations.id
            WHERE tourstops.id = $1
            ORDER BY location_id`,
            [tourstop_id]
     );
+    console.log(result.rows[0])
 
     if (result.rows.length ==0){
       throw new NotFoundError(`No tourstop for tourstop_id: ${tourstop_id}`)
