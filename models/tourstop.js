@@ -89,7 +89,7 @@ static async createTourstop(
            ORDER BY location_id`,
            [tourstop_id]
     );
-    console.log(result.rows[0])
+ 
 
     if (result.rows.length ==0){
       throw new NotFoundError(`No tourstop for tourstop_id: ${tourstop_id}`)
@@ -100,6 +100,8 @@ static async createTourstop(
     const activitiesforTS = await db.query(
       `SELECT activities.id AS activity_id,
               pois.id AS poi_id,
+              activities.traveltime,
+              activities.travelmode,
               name,
               category,
               address,
