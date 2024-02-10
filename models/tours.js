@@ -102,8 +102,9 @@ class Tour {
   
       // update tour for given tour_id
       static async update(tour_id, data) {
-        if(data.end)  {data.end = unix.fromDate(data.end)}
-        if(data.start){data.start= unix.fromDate(data.start)}
+        console.log(data)
+        if(data.enddate)  {data.enddate = unix.fromDate(data.enddate)}
+        if(data.startdate){data.startdate= unix.fromDate(data.startdate)}
         const { setCols, values } = sqlForPartialUpdate(
            data,
             {
