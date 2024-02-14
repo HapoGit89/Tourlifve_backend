@@ -107,6 +107,8 @@ class Location {
             return result.rows[0];
           }
 
+
+   
      // update location for given location_id
      static async update(location_id, data) {
      
