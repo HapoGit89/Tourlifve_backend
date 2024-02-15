@@ -90,6 +90,7 @@ router.post("/", ensureLoggedIn, async(req,res, next)=>{
             console.log(res.locals.user)
             const tourstop_id = req.params.tourstop_id
             const tourstop = await Tourstop.getbyTourstopId(tourstop_id)
+            const user = await User.get(res.locals.user.username)
             const testArray = user.tours.filter(el => el.id == tourstop.tour_id)
             if (testArray.length == 0 && !res.locals.user.isAdmin){
                 throw new UnauthorizedError
