@@ -148,7 +148,7 @@ describe("DELETE /:tourstop_id", ()=>{
                 expect(res5.body).toEqual(
                     {tourstop: {activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
                 )
-                    const res6 = await request(app).delete(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token).send({ date: "1989-10-13"}) 
+                    const res6 = await request(app).delete(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
                     try{
                         await request(app).get(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
                     }
@@ -158,7 +158,7 @@ describe("DELETE /:tourstop_id", ()=>{
                     })
                 
         
-                    test("doesnt work with unknown poi_id ", async ()=>{
+                    test("doesnt work with unknown tourstop_id ", async ()=>{
                         const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
                             try{
                                 await request(app).delete(`/tourstops/999282`).set('authorization', res1.body.token)
