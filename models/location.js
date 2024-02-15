@@ -47,7 +47,7 @@ class Location {
               lng
               )
              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-             RETURNING name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng`,
+             RETURNING id, name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng`,
           [
             name, country, city, postal_code, street, housenumber, googleplaces_id, lat, lng
           ],

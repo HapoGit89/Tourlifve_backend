@@ -41,7 +41,7 @@ describe("createLocation", function () {
     
       const result = await Location.createLocation(newLocation);
       expect(result).toEqual(
-        {   
+        {   id: expect.any(Number),
             name: "Testlocation",
             country: "Testcountry",
             city: "Testcity",

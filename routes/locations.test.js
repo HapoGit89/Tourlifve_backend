@@ -27,6 +27,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
        const res3 = await request(app).post("/locations/").set('authorization', res1.body.token).send(newLocation)
        expect(res3.body).toEqual(
         {location: {
+            id: expect.any(Number),
                city: "Berlin",
                 country: "Germany",
                 googleplaces_id: "abcde",
