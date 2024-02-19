@@ -64,7 +64,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
       const res5 = await request(app).get(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
        expect(res5.body).toEqual(
          
-            {tourstop: {activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
+            {tourstop: {activities: expect.any(Array), lat: expect.any(Number), lng: expect.any(Number),name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
          
     )
     })
@@ -146,7 +146,7 @@ describe("DELETE /:tourstop_id", ()=>{
                 const res4 =await request(app).post("/tourstops").set('authorization', res1.body.token).send({tour_id: tour_id, location_id:location_id, date: "1989-10-12"})
                 const res5 = await request(app).get(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
                 expect(res5.body).toEqual(
-                    {tourstop: {activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
+                    {tourstop: {lat: expect.any(Number), lng: expect.any(Number),activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id,  date: expect.any(String)}}      
                 )
                     const res6 = await request(app).delete(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
                     try{
@@ -177,7 +177,7 @@ describe("DELETE /:tourstop_id", ()=>{
                         const res4 =await request(app).post("/tourstops").set('authorization', res1.body.token).send({tour_id: tour_id, location_id:location_id, date: "1989-10-12"})
                         const res5 = await request(app).get(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token)
                         expect(res5.body).toEqual(
-                            {tourstop: {activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
+                            {tourstop: {lat: expect.any(Number), lng: expect.any(Number),activities: expect.any(Array), name: "Location1", street: "street1", country: "Country1", housenumber: "1", googleplaces_id: expect.any(String),city:"city1",id: expect.any(Number), tour_id:tour_id, location_id:location_id, date: expect.any(String)}}      
                         )
                             
                             try{

@@ -115,6 +115,8 @@ test("doesnt work with unknown id", async function () {
             name: "Location1",
             location_note: undefined,
             street: "street1",
+            lat: expect.any(Number),
+            lng: expect.any(Number),
             tour_id: expect.any(Number),}
         )
       
