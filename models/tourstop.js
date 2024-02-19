@@ -83,7 +83,9 @@ static async createTourstop(
                   tourstops.tour_id,
                   location_id,
                   tour_id,
-                  date
+                  date,
+                  lat,
+                  lng
            FROM tourstops JOIN locations ON tourstops.location_id = locations.id
            WHERE tourstops.id = $1
            ORDER BY location_id`,

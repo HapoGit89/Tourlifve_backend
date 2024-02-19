@@ -32,7 +32,8 @@ class Location {
       if (duplicateCheck.rows[0]) {
         throw new BadRequestError(`Duplicate location: ${name} with googleplaces_id: ${googleplaces_id}`);
       }
- 
+
+     
       // Insert location into db
       const result = await db.query(
             `INSERT INTO locations
