@@ -74,6 +74,7 @@ describe("getFullData", function () {
         const result2 = await Activity.getFullData(activities.rows[0].id)
       expect(result2).toEqual({
         id: expect.any(Number),
+        user_id: expect.any(Number),
         tourstop_id: tourstop_id,
         poi_id: poi_id,
         poi_name:"poi1",

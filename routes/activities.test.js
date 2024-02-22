@@ -108,6 +108,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
             {
                 activity: {
                   id: expect.any(Number),
+                  user_id: expect.any(Number),
                   tourstop_id: expect.any(Number),
                   poi_id: expect.any(Number),
                   poi_name: 'poi1',
@@ -184,6 +185,7 @@ describe("DELETE /:activity_id", ()=>{
                     {
                         activity: {
                           id: expect.any(Number),
+                          user_id: expect.any(Number),
                           tourstop_id: expect.any(Number),
                           poi_id: expect.any(Number),
                           poi_name: 'poi1',
@@ -231,6 +233,7 @@ describe("DELETE /:activity_id", ()=>{
                             {
                                 activity: {
                                   id: expect.any(Number),
+                                  user_id:expect.any(Number),
                                   tourstop_id: expect.any(Number),
                                   poi_id: expect.any(Number),
                                   poi_name: 'poi1',

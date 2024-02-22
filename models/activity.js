@@ -49,6 +49,7 @@ static async createActivity(
 static async getFullData(activity_id) {
     const result = await db.query(
           `SELECT activities.id,
+                  tours.user_id,
                   tourstop_id,
                   poi_id,
                   name AS poi_name,
@@ -58,7 +59,7 @@ static async getFullData(activity_id) {
                   address AS poi_address,
                   traveltime,
                   travelmode
-           FROM activities JOIN pois ON activities.poi_id = pois.id
+           FROM activities JOIN pois ON activities.poi_id = pois.id JOIN tourstops on activities.tourstop_id = tourstops.id JOIN tours on tourstops.tour_id = tours.id
            WHERE activities.id = $1`,
            [activity_id]
     );
