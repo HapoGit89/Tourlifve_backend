@@ -34,10 +34,16 @@ class Tour {
         throw new BadRequestError(`Duplicate tour: ${title} for user : ${user_id}`);
       }
  
-      // convert start and enddates to unix timestamp
+      // convert start and enddates to unix timestamp and check if tour is in the past
 
       const endunix = unix.fromDate(enddate)
       const startunix = unix.fromDate(startdate)
+      const now = Date.now()
+    
+     
+      if (endunix < now){
+        throw new BadRequestError("Tour in the past")
+      }
       // Insert tourdata into db
       const result = await db.query(
             `INSERT INTO tours
