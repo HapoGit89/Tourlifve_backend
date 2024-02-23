@@ -38,9 +38,8 @@ class Tour {
 
       const endunix = unix.fromDate(enddate)
       const startunix = unix.fromDate(startdate)
-      const now = Date.now()
-    
-     
+      const now = Date.now()/1000
+      
       if (endunix < now){
         throw new BadRequestError("Tour in the past")
       }
