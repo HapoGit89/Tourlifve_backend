@@ -74,9 +74,6 @@ static async createTourstop(
                [tour_id]
         );
 
-        if (result.rows.length ==0){
-          throw new NotFoundError(`No tourstops for tour: ${tour_id}`)
-        }
 
         result.rows.forEach((el)=>el.date=unix.toDate(Number(el.date)))
 

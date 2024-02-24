@@ -114,12 +114,14 @@ class Tour {
 
         // check if new tour start/enddate collides with existing tourdates
         const tourdates = await Tourstop.get(tour_id)
+
+        if (tourdates.length >0){
         const firstdate = unix.fromDate(tourdates[0].date)
         const lastdate = unix.fromDate(tourdates[tourdates.length-1].date)
 
        if (data.enddate < lastdate) throw new BadRequestError("Please enter a new enddate AFTER the last tourstop")
        if (data.startdate > firstdate) throw new BadRequestError("Please enter a new startdate BEFORE the first tourstop")
-
+        }
         //
 
         const { setCols, values } = sqlForPartialUpdate(
