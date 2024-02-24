@@ -6,7 +6,7 @@
       "name": {
         "name": "string",
         "minLength": 1,
-        "maxLength": 30
+        "maxLength": 100
       },
       "category": {
         "type": "string",
