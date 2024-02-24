@@ -1,6 +1,6 @@
 const db = require("../db.js");
 const {sqlForPartialUpdate} = require("../helpers/sql.js")
-const bcrypt = require("bcrypt");
+const Tourstop = require("./tourstop.js")
 const unix = require("unix-timestamp")
 const {
   NotFoundError,
@@ -107,9 +107,21 @@ class Tour {
   
       // update tour for given tour_id
       static async update(tour_id, data) {
-        console.log(data)
+     
+      
         if(data.enddate)  {data.enddate = unix.fromDate(data.enddate)}
         if(data.startdate){data.startdate= unix.fromDate(data.startdate)}
+
+        // check if new tour start/enddate collides with existing tourdates
+        const tourdates = await Tourstop.get(tour_id)
+        const firstdate = unix.fromDate(tourdates[0].date)
+        const lastdate = unix.fromDate(tourdates[tourdates.length-1].date)
+
+       if (data.enddate < lastdate) throw new BadRequestError("Please enter a new enddate AFTER the last tourstop")
+       if (data.startdate > firstdate) throw new BadRequestError("Please enter a new startdate BEFORE the first tourstop")
+
+        //
+
         const { setCols, values } = sqlForPartialUpdate(
            data,
             {

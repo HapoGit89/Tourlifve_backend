@@ -57,7 +57,7 @@ static async createTourstop(
                       date
                FROM tourstops JOIN locations ON tourstops.location_id = locations.id
                WHERE tour_id = $1
-               ORDER BY location_id`,
+               ORDER BY date`,
                [tour_id]
         );
 
