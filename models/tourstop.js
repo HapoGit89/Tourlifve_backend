@@ -17,7 +17,19 @@ static async createTourstop(
 
         //convert Date to timestamp
         const unixdate = unix.fromDate(date)
-        
+
+         // check if tourstop is out of bounds with tour start/enddate
+  
+  const tour = await db.query(`SELECT startdate,
+                              enddate FROM tours
+                              WHERE id = $1`, [tour_id])
+  const tourstart = tour.rows[0].startdate
+  const tourend = tour.rows[0].enddate     
+
+
+  if (unixdate < tourstart) throw new BadRequestError("Please select new date withing tour timeframe")
+  if (unixdate > tourend) throw new BadRequestError("Please select new date withing tour timeframe")
+  //
   const duplicateCheck = await db.query(
         `SELECT tour_id
          FROM tourstops
