@@ -1,5 +1,6 @@
 const db = require("../db.js");
 const {sqlForPartialUpdate} = require("../helpers/sql.js")
+const Tour = require("./tours.js")
 const {
   NotFoundError,
   BadRequestError,
@@ -153,7 +154,18 @@ const note = await db.query (`SELECT locationnotes.id,
  // update tourstop for given tourstop_id
  static async update(tourstop_id, data) {
   data.date = unix.fromDate(data.date)
- 
+
+  // check if tourstop is out of bounds with tour start/enddate
+  const tourstop_data = await Tourstop.getFullData(tourstop_id)
+  const tour = await db.query(`SELECT startdate,
+                              enddate FROM tours
+                              WHERE id = $1`, [tourstop_data.tour_id])
+  const tourstart = tour.rows[0].startdate
+  const tourend = tour.rows[0].enddate     
+  
+  if (data.date < tourstart) throw new BadRequestError("Please select new date withing tour timeframe")
+  if (data.date > tourend) throw new BadRequestError("Please select new date withing tour timeframe")
+  //
   const { setCols, values } = sqlForPartialUpdate(
      data,
       {
