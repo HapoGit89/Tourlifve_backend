@@ -65,14 +65,14 @@ static async searchNearby({lat, lng, query, category}){
 static async combinedSearch({origin_id, mode,lat,lng, query, duration, category}){
     const places = await this.searchNearby({lat:lat,lng:lng,query:query, category: category})
     // build destinations string for Distance Search
-  
+    if (!places.places) places.places = []
     let destinations = ""
     places.places.forEach((el)=>destinations += `place_id:${el.id}|`)
 
 
     // Search for distances between origin and places
     let distances = await this.searchDistance({origin:`place_id:${origin_id}`, destinations: destinations, mode:mode})
-    console.log(distances)
+
 
    // combine places results and distances results
     for (let i = 0; i < distances.destinations.length ; i++){
