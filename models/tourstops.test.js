@@ -27,11 +27,12 @@ describe("createTourstop", function () {
     test("works", async function () {
 
         const tours = await Tour.findAll()
+        console.log(tours[0])
         const tour_id = tours[0].id
         const location = await Location.findAll()
         const location_id = location[0].id
 
-      const result = await Tourstop.createTourstop(tour_id, location_id, "1989-12-12");
+      const result = await Tourstop.createTourstop(tour_id, location_id, "1989-10-12");
       expect(result).toEqual({
         tour_id: tour_id,
         location_id: location_id,
@@ -47,7 +48,7 @@ describe("createTourstop", function () {
         const location = await Location.findAll()
         const location_id = location[0].id
       try {
-      const result = await Tourstop.createTourstop(tour_id, location_id, "1989-12-12");
+      const result = await Tourstop.createTourstop(tour_id, location_id, "1989-10-11");
       } catch (e) {
         expect(e instanceof BadRequestError).toBeTruthy();
       }
@@ -145,16 +146,15 @@ describe("update", function () {
   
   test("works", async function () {
 
-    const tourstop = await db.query('SELECT id FROM tourstops')
-
-    const updated = await Tourstop.update(tourstop.rows[0].id, {date: "1989-06-01"})
+    const tourstop = await db.query('SELECT id, date FROM tourstops')
+    const updated = await Tourstop.update(tourstop.rows[0].id, {date: "1989-10-11"})
     
 
     expect(updated).toEqual(
         { 
             location_id: expect.any(Number),
             tour_id: expect.any(Number),
-            date: "612662400",
+            date: "624067200",
             id: tourstop.rows[0].id
 
           }

@@ -30,8 +30,8 @@ describe("createTour", function () {
         const newTour = {
             title: "LiveTour",
             artist: "Artist1",
-            startdate: "1989-01-01",
-            enddate:"1989-01-10",
+            startdate: "2025-01-01",
+            enddate:"2025-01-10",
             user_id: user.id
           };
      
@@ -65,8 +65,8 @@ describe("createTour", function () {
         const newTour = {
             title: "LiveTour",
             artist: "Artist1",
-            startdate: "1989-01-01",
-            enddate:"1989-01-10",
+            startdate: "2025-01-01",
+            enddate:"2025-01-10",
             user_id: user.id
           };
         await Tour.createTour(newTour);

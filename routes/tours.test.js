@@ -24,7 +24,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
        
       const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
       const res2 = await await request(app).get("/users/u1").set('authorization', res1.body.token)
-      const newTour = {title: "LiveTour24", artist: "LiveArtist24", startdate: "1989-10-27", enddate: "1989-10-29", user_id: res2.body.id}      
+      const newTour = {title: "LiveTour24", artist: "LiveArtist24", startdate: "2025-10-27", enddate: "2025-10-29", user_id: res2.body.id}      
        const res3 = await request(app).post("/tours/").set('authorization', res1.body.token).send(newTour)
        expect(res3.body).toEqual(
         {tour: {id: expect.any(Number),title: "LiveTour24", artist: "LiveArtist24", startdate: expect.any(String), enddate: expect.any(String), user_id: res2.body.id} }
@@ -32,7 +32,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
     })
     test("does not work for anon", async ()=>{
         try{
-          await request(app).post("/tours/").set('authorization', "blah").send({title: "LiveTour24", artist: "LiveArtist24", startdate: "1989-10-27", enddate: "1989-10-29", user_id: 9839})
+          await request(app).post("/tours/").set('authorization', "blah").send({title: "LiveTour24", artist: "LiveArtist24", startdate: "2025-10-27", enddate: "2025-10-29", user_id: 9839})
         }
         catch(e){
 
@@ -42,7 +42,7 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
         test("does not work for dupes", async ()=>{
             const res1 = await request(app).post("/auth/token").send({username:"u1", password: "password1"})
             const res2 = await await request(app).get("/users/u1").set('authorization', res1.body.token)
-            const newTour = {title: "LiveTour24", artist: "LiveArtist24", startdate: "1989-10-27", enddate: "1989-10-29", user_id: res2.body.id}      
+            const newTour = {title: "LiveTour24", artist: "LiveArtist24", startdate: "2025-10-27", enddate: "2025-10-29", user_id: res2.body.id}      
             await request(app).post("/tours/").set('authorization', res1.body.token).send(newTour)
             try{
                 await request(app).post("/tours/").set('authorization', res1.body.token).send(newTour)

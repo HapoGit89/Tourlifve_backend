@@ -95,9 +95,9 @@ const { BadRequestError, UnauthorizedError, NotFoundError } = require("../expres
             const res3 = await request(app).get("/locations").set('authorization', res1.body.token)
             const location_id = res3.body.locations[0].id
             const res4 =await request(app).post("/tourstops").set('authorization', res1.body.token).send({tour_id: tour_id, location_id:location_id, date: "1989-10-12"})
-           const res5 = await request(app).patch(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token).send({ date: "1989-10-13"})
+           const res5 = await request(app).patch(`/tourstops/${res4.body.tourstop.id}`).set('authorization', res1.body.token).send({ date: "1989-10-11"})
             expect(res5.body).toEqual({updated:
-            {id: res4.body.tourstop.id,date: `${unix.fromDate("1989-10-13")}`, location_id:location_id, tour_id: tour_id}
+            {id: res4.body.tourstop.id,date: `${unix.fromDate("1989-10-11")}`, location_id:location_id, tour_id: tour_id}
         
             } )
         })
