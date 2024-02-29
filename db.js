@@ -9,7 +9,7 @@ if (process.env.NODE_ENV === "test"){
     DB_URI = "postgresql:///tl_test";
 }
 else {
-    DB_URI = "postgresql:///tl";
+    DB_URI = process.env.DB_URI;
 }
 
 // make new client with DB_URI
